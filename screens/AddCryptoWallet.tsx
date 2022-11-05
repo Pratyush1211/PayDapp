@@ -1,4 +1,4 @@
-import { StyleSheet, View, ToastAndroid, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ToastAndroid, TouchableOpacity, Text } from "react-native";
 import React, { useState } from "react";
 
 import WalletDetails from "../components/WalletDetails";
@@ -37,6 +37,7 @@ export default function AddCryptoWallet({ navigation }: any) {
   });
 
   const killSession = React.useCallback(() => {
+    ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
     return connector.killSession();
   }, [connector]);
 
@@ -59,9 +60,9 @@ export default function AddCryptoWallet({ navigation }: any) {
           </TouchableOpacity>
         </>
       )}
-      {/* <TouchableOpacity onPress={killSession} style={{}}>
+      <TouchableOpacity onPress={killSession} style={{}}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
     </View>
   );
 }
