@@ -9,7 +9,7 @@ import React, {useState, useEffect} from 'react';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default function AddRecipientScreen({navigation, route}: any) {
+export default function AddRecipientScreen({navigation, route}) {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -31,7 +31,7 @@ export default function AddRecipientScreen({navigation, route}: any) {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }: any) => {
+  const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setQrvalue(data)
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);

@@ -8,7 +8,7 @@ module.exports = {
       fs: require.resolve('expo-file-system'),
       http: require.resolve('stream-http'),
       https: require.resolve('https-browserify'),
-      net: require.resolve('react-native-tcp'),
+      net: require.resolve('react-native-tcp-socket'),
       os: require.resolve('os-browserify/browser.js'),
       path: require.resolve('path-browserify'),
       stream: require.resolve('readable-stream'),

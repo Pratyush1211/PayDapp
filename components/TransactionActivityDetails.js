@@ -23,7 +23,7 @@ export default function TransactionActivityDetails({
   receiver,
   gasPrice,
   timeStamp,
-}: any) {
+}) {
   return (
     <>
       <View>

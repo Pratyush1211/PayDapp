@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import PrimaryButton from '../components/PrimaryButton'
+import PrimaryButton from '../../components/PrimaryButton'
 
-const FingerPrint = require('../assets/images/fingerprint.png');
+const FingerPrint = require('../../assets/images/fingerprint.png');
 
 export default function LoginScreen({navigation}: any) {
 

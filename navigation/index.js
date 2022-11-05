@@ -17,20 +17,20 @@ import { ColorSchemeName, Pressable } from "react-native";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
-import LoginScreen from "../screens/LoginScreen";
-import CreateAccountScreen from "../screens/CreateAccountScreen";
-import AddPaymentMethodScreen from "../screens/AddPaymentMethodScreen";
-import AddCryptoWallet from "../screens/AddCryptoWallet";
-import HomeScreen from "../screens/HomeScreen";
+import LoginScreen from "../src/screens/LoginScreen";
+import CreateAccountScreen from "../src/screens/CreateAccountScreen";
+import AddPaymentMethodScreen from "../src/screens/AddPaymentMethodScreen";
+import AddCryptoWallet from "../src/screens/AddCryptoWallet";
+import HomeScreen from "../src/screens/HomeScreen";
 
-import SelectRecepientScreen from "../screens/SelectRecepientScreen";
-import AddRecipientScreen from "../screens/AddRecipientScreen";
-import ReviewandSendScreen from "../screens/ReviewandSendScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
+import AddRecipientScreen from "../src/screens/AddRecipientScreen";
+import ReviewandSendScreen from "../src/screens/ReviewandSendScreen";
+import ProfileScreen from "../src/screens/ProfileScreen";
+import ModalScreen from "../src/screens/ModalScreen";
+import NotFoundScreen from "../src/screens/NotFoundScreen";
+import TabOneScreen from "../src/screens/TabOneScreen";
+import TabTwoScreen from "../src/screens/TabTwoScreen";
 import {
   RootStackParamList,
   RootTabParamList,

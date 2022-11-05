@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react'
 import { Avatar, Divider } from 'react-native-paper';
 // import { useSelector } from 'react-redux';
 
-import PrimaryButton from '../components/PrimaryButton';
+import PrimaryButton from '../../components/PrimaryButton';
 
 
 const { name, role } = {

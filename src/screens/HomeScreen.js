@@ -9,13 +9,13 @@ import {
 import React, {useState} from 'react'
 import { FontAwesome5 } from '@expo/vector-icons';
 
-import TransactionActivityDetails from '../components/TransactionActivityDetails';
+import TransactionActivityDetails from '../../components/TransactionActivityDetails';
 
-const HomeScreen = ({navigation}: any) => {
+const HomeScreen = ({navigation}) => {
 
     const [expanded, setExpanded] = useState(false);
     const [transactionActivity, settransactionActivity] = useState(false);
-    const image = require('../assets/images/ETH.png');
+    const image = require('../../assets/images/ETH.png');
 
     const handlePress = () => setExpanded(!expanded);
 

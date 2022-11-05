@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
-import PrimaryButton from "../components/PrimaryButton";
+import PrimaryButton from "../../components/PrimaryButton";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const { name, role } = {
@@ -37,7 +37,7 @@ const { name, role } = {
 //   </>
 // );
 
-export default function SelectRecepientScreen({ navigation, route }: any) {
+export default function SelectRecepientScreen({ navigation, route }) {
   const [qrmodalVisible, setQrModalVisible] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -50,11 +50,12 @@ export default function SelectRecepientScreen({ navigation, route }: any) {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
+      console.log(hasPermission)
     };
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }: any) => {
+  const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setQrvalue(data);
     Alert.alert(

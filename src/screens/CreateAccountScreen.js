@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import React, {useState} from "react";
 
-import PrimaryButton from "../components/PrimaryButton";
+import PrimaryButton from "../../components/PrimaryButton";
 
-export default function CreateAccountScreen({ navigation }: any) {
+export default function CreateAccountScreen({ navigation }) {
   const screen = Dimensions.get("screen").width;
   const inputboxWidth = 0.88 * screen;
 

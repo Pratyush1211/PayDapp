@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 
-const Card = ({title, image}: any) => (
+const Card = ({title, image}) => (
   <>
     <View style={styles.MethodContainer}>
       <View style={{width: 15}}/>
@@ -18,24 +18,24 @@ const options = [
   {
     id: 1,
     title: 'Add Crypto Wallet',
-    image: require('../assets/images/Bank.png'),
+    image: require('../../assets/images/Bank.png'),
     screen: 'Add Crypto Wallet',
   },
   {
     id: 2,
     title: 'Add Credit Card',
-    image: require('../assets/images/card.png'),
+    image: require('../../assets/images/card.png'),
     screen: 'Add Credit Card',
   },
   {
     id: 3,
     title: 'Add Bank Account',
-    image: require('../assets/images/Crypto.png'),
+    image: require('../../assets/images/Crypto.png'),
     screen: 'Add Bank Details',
   },
 ];
 
-export default function AddPaymentMethodScreen({navigation}: any) {
+export default function AddPaymentMethodScreen({navigation}) {
   return (
     <View style={styles.container}>
       {options.map(option => (

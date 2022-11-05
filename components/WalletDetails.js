@@ -7,7 +7,7 @@ const WalletDetails = ({
   title,
   NetworkId,
   address,
-}: any) => {
+}) => {
   return (
     <>
       <View style={styles.cardContainer}>
