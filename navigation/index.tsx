@@ -24,6 +24,8 @@ import AddCryptoWallet from "../screens/AddCryptoWallet";
 import HomeScreen from "../screens/HomeScreen";
 
 import SelectRecepientScreen from "../screens/SelectRecepientScreen";
+import AddRecipientScreen from "../screens/AddRecipientScreen";
+import ReviewandSendScreen from "../screens/ReviewandSendScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -35,6 +37,7 @@ import {
   RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+
 
 export default function Navigation({
   colorScheme,
@@ -116,6 +119,24 @@ function RootNavigator() {
       />
       <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen name="Select Recipient" component={SelectRecepientScreen} options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}/>
+      <Stack.Screen name="Add Recipient" component={AddRecipientScreen} options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}/>
+      <Stack.Screen name="Review & Send" component={ReviewandSendScreen} options={{
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {

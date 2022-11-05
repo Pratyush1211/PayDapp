@@ -5,12 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Dimensions,
   Modal,
-  Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Avatar, Divider } from "react-native-paper";
+import { BarCodeScanner } from "expo-barcode-scanner";
 import PrimaryButton from "../components/PrimaryButton";
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -37,14 +37,76 @@ const { name, role } = {
 //   </>
 // );
 
-export default function SelectRecepientScreen({ navigation, route }) {
-  const [receipient, setreceipient] = React.useState("");
-  const [qrvalue, setqrcode] = React.useState("");
-  const [amount, setamount] = React.useState("");
+export default function SelectRecepientScreen({ navigation, route }: any) {
+  const [qrmodalVisible, setQrModalVisible] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [qrvalue, setQrvalue] = useState("");
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [amount, setamount] = React.useState("");
+
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
+    getBarCodeScannerPermissions();
+  }, []);
+
+  const handleBarCodeScanned = ({ type, data }: any) => {
+    setScanned(true);
+    setQrvalue(data);
+    Alert.alert(
+      `Bar code with type ${type} and data ${data} has been scanned!`
+    );
+    if (hasPermission === null) {
+      return <Text>Requesting for camera permission</Text>;
+    }
+    if (hasPermission === false) {
+      return <Text>No access to camera</Text>;
+    }
+  };
+
+  const handleQrModal = () => {
+    setQrModalVisible(!qrmodalVisible);
+    setModalVisible(!modalVisible);
+    setScanned(false);
+  };
+
+  const handleSendingAmount = () => {
+    navigation.navigate("Review & Send", {
+      receiverwalletaddress: qrvalue,
+      amount: amount,
+    });
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={qrmodalVisible}
+        onRequestClose={() => {
+          setQrModalVisible(!qrmodalVisible);
+        }}
+      >
+        <View style={styles.QrModalcontainer}>
+          <View>
+            {scanned && <Text>{qrvalue}</Text>}
+            {scanned && (
+              <TouchableOpacity onPress={handleQrModal}>
+                <PrimaryButton title={"Continue"} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={{ height: "80%", width: "80%" }}
+          />
+        </View>
+      </Modal>
 
       <Modal
         animationType="slide"
@@ -54,9 +116,9 @@ export default function SelectRecepientScreen({ navigation, route }) {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.Modalcontainer}>
+        <View style={styles.AmountModalcontainer}>
           <Text style={styles.label}>Sending to: </Text>
-          <Text style={styles.label}>walletaddress</Text>
+          <Text style={styles.label}>{qrvalue}</Text>
           <TextInput
             style={styles.AmountText}
             placeholder="0 ETH"
@@ -65,40 +127,25 @@ export default function SelectRecepientScreen({ navigation, route }) {
             keyboardType={"number-pad"}
           />
           <View style={styles.ButtonAlignment}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Review & Send", {
-                  // receiverwalletaddress: walletaddress,
-                  amount: amount,
-                })
-              }
-            >
+            <TouchableOpacity onPress={handleSendingAmount}>
               <PrimaryButton title={"Next"} />
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      {/* <View style={styles.SearchInputContainer}>
-        <FontAwesome5Icon name="search" size={20} color="#AEAEAE" />
-        <TextInput
-          style={[styles.input, { width: 350 }]}
-          placeholder="Search name or username"
-          placeholderTextColor={'#AEAEAE'}
-          onChangeText={setreceipient}
-          value={receipient}
-        />
-      </View> */}
+
       <TouchableOpacity
         style={styles.SearchInputContainer}
-        // onPress={() => {
-        //   navigation.navigate("Add Recipient");
-        // }}
+        onPress={() => {
+          setQrModalVisible(!qrmodalVisible);
+        }}
       >
         <FontAwesome5 name="qrcode" size={20} color="#FFF" />
         <Text style={[styles.input, { fontWeight: "700", color: "#FFF" }]}>
           Scan QR code
         </Text>
       </TouchableOpacity>
+
       <View>
         <Text style={{ textAlign: "center" }}>OR</Text>
       </View>
@@ -110,7 +157,7 @@ export default function SelectRecepientScreen({ navigation, route }) {
           style={styles.InputContainer}
           placeholder="Enter username"
           placeholderTextColor={"#AEAEAE"}
-          onChangeText={setqrcode}
+          onChangeText={setQrvalue}
           value={qrvalue}
         />
         <TouchableOpacity
@@ -173,10 +220,16 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "400",
   },
-  Modalcontainer: {
+  QrModalcontainer: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  AmountModalcontainer: {
     flex: 1,
     backgroundColor: "#FFF",
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   label: {
     fontSize: 15,
