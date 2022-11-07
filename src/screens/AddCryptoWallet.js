@@ -37,7 +37,7 @@ export default function AddCryptoWallet({ navigation }) {
 
     // Get provided accounts and chainId
     const { accounts, chainId } = payload.params[0];
-    dispatch(setWalletAddress(accounts));
+    dispatch(setWalletAddress(accounts[0]));
     console.log(accounts);
     console.log(chainId);
   });

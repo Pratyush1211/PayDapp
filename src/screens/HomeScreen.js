@@ -21,6 +21,7 @@ const HomeScreen = ({navigation}) => {
     const userwalletaddress = useSelector((state)=>state.wallet.userwalletAddress)
 
     console.log("Wallet Address of user fetched from redux", userwalletaddress);
+    console.log(typeof userwalletaddress);
 
     const handlePress = () => setExpanded(!expanded);
 
