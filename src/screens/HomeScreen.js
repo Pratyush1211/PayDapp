@@ -8,6 +8,7 @@ import {
   } from 'react-native';
 import React, {useState} from 'react'
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 import TransactionActivityDetails from '../../components/TransactionActivityDetails';
 
@@ -16,6 +17,10 @@ const HomeScreen = ({navigation}) => {
     const [expanded, setExpanded] = useState(false);
     const [transactionActivity, settransactionActivity] = useState(false);
     const image = require('../../assets/images/ETH.png');
+
+    const userwalletaddress = useSelector((state)=>state.wallet.userwalletAddress)
+
+    console.log("Wallet Address of user fetched from redux", userwalletaddress);
 
     const handlePress = () => setExpanded(!expanded);
 
@@ -151,12 +156,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     margin: 5,
     marginBottom: 15,
-    height: 80,
+    height: 90,
     borderRadius: 10,
-    elevation: 3,
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap',    
+    shadowColor: '#121212',  
+    elevation: 4,    
   },
   ImageContainer: {
     backgroundColor: '#00000',

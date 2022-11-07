@@ -1,11 +1,14 @@
 import { StyleSheet, View, ToastAndroid, TouchableOpacity, Text } from "react-native";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import WalletDetails from "../../components/WalletDetails";
 import PrimaryButton from "../../components/PrimaryButton";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setWalletAddress } from "../redux/slices/walletSlice";
+
 
 const shortenAddress = (address) => {
   return `${address.slice(0, 6)}...${address.slice(
@@ -13,8 +16,10 @@ const shortenAddress = (address) => {
     address.length
   )}`;
 };
+
 export default function AddCryptoWallet({ navigation }) {
   const connector = useWalletConnect();
+  const dispatch = useDispatch();
 
   const connectWallet = React.useCallback(
     async (data) => {
@@ -32,6 +37,7 @@ export default function AddCryptoWallet({ navigation }) {
 
     // Get provided accounts and chainId
     const { accounts, chainId } = payload.params[0];
+    dispatch(setWalletAddress(accounts));
     console.log(accounts);
     console.log(chainId);
   });
@@ -41,17 +47,18 @@ export default function AddCryptoWallet({ navigation }) {
     return connector.killSession();
   }, [connector]);
 
-  const importData = async () => {
-    try {
-      const keys = await AsyncStorage.getAllKeys();
-      console.log("key is:",keys);
-      const result = await AsyncStorage.multiGet(keys);
+  // const importData = async () => {
+  //   try {
+  //     const keys = await AsyncStorage.getAllKeys();
+  //     console.log("key is:",keys);
+  //     const result = await AsyncStorage.multiGet(keys);
   
-      return console.log(result);
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  //     return console.log(result);
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
   return (
     <View style={styles.container}>
       {!connector.connected && (
@@ -71,7 +78,7 @@ export default function AddCryptoWallet({ navigation }) {
           </TouchableOpacity>
         </>
       )}
-      <TouchableOpacity onPress={importData} style={{}}>
+      <TouchableOpacity onPress={killSession} style={{}}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
           </TouchableOpacity>
     </View>

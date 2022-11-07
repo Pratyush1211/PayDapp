@@ -204,6 +204,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="wallet" color={color} size={30} />
           ),
+          tabBarLabel: 'Wallet',
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {
