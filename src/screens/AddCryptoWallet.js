@@ -78,9 +78,9 @@ export default function AddCryptoWallet({ navigation }) {
           </TouchableOpacity>
         </>
       )}
-      <TouchableOpacity onPress={killSession} style={{}}>
+      {/* <TouchableOpacity onPress={killSession} style={{}}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
     </View>
   );
 }

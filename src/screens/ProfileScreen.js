@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, ToastAndroid } from 'react-native';
 import React from 'react';
 import { Avatar, Button } from 'react-native-paper';
 
+
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import ProfileOptions from '../../components/ProfileOptions';
-import { Touchable } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+
 
 const { name, role } = {
     name: 'Freddy Sanchez',
@@ -41,9 +42,15 @@ const options = [
 
 const ProfileScreen = ({navigation}) => {
 
-    const logout= ()=>{
+    const connector = useWalletConnect();
+
+    const logout = React.useCallback(() => {
+        ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
         navigation.popToTop();
-    }
+        return connector.killSession();
+      }, [connector]);
+
+
     return (
         <View style={styles.container}>
             <ScrollView>
