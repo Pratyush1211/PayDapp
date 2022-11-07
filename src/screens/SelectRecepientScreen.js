@@ -56,16 +56,18 @@ export default function SelectRecepientScreen({ navigation, route }) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setQrvalue(data);
-    Alert.alert(
-      `Bar code with type ${type} and data ${data} has been scanned!`
-    );
     if (hasPermission === null) {
       return <Text>Requesting for camera permission</Text>;
     }
-    if (hasPermission === false) {
+    else if (hasPermission === false) {
       return <Text>No access to camera</Text>;
+    }
+    else {
+      setScanned(true);
+      setQrvalue(data);
+      Alert.alert(
+        `Bar code with type ${type} and data ${data} has been scanned!`
+      );
     }
   };
 
@@ -94,7 +96,7 @@ export default function SelectRecepientScreen({ navigation, route }) {
         }}
       >
         <View style={styles.QrModalcontainer}>
-          <View>
+          <View style={{alignItems: 'center'}}>
             {scanned && <Text>{qrvalue}</Text>}
             {scanned && (
               <TouchableOpacity onPress={handleQrModal}>

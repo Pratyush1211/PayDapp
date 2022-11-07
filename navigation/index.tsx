@@ -225,7 +225,7 @@ function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Profile"
+        name="ProfileNav"
         component={ProfileNavigation}
         options={{
           title: "Profile",

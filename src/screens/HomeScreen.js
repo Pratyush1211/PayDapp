@@ -9,6 +9,10 @@ import {
 import React, {useState} from 'react'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+import '@ethersproject/shims';
+import axios from 'axios';
+import { useWalletConnect } from '@walletconnect/react-native-dapp';
+
 
 import TransactionActivityDetails from '../../components/TransactionActivityDetails';
 
@@ -20,6 +24,7 @@ const HomeScreen = ({navigation}) => {
 
     const [expanded, setExpanded] = useState(false);
     const [transactionActivity, settransactionActivity] = useState(false);
+    const [loading, setLoading] = useState(false)
 
     const userwalletaddress = useSelector((state)=>state.wallet.userwalletAddress)
 
@@ -29,7 +34,7 @@ const HomeScreen = ({navigation}) => {
     const handlePress = () => setExpanded(!expanded);
 
     const ActivityhandlePress = () => {
-      // getTransaction();
+      getTransaction();
       settransactionActivity(!transactionActivity);
     };
 
@@ -57,31 +62,33 @@ const HomeScreen = ({navigation}) => {
     // }, []);
 
     
-  // async function getTransaction() {
-  //   const ADDRESS = walletaddress;
-  //   const apikey = 'ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8';
-  //   const endpoint = 'https://api-testnet.polygonscan.com/api';
-  //   try {
-  //     const etherscan = await axios.get(
-  //       endpoint +
-  //       `?module=account&action=txlist&address=${ADDRESS}&startblock=0
-  //       &endblock=9999999
-  //       &page=1
-  //       &offset=1000
-  //       &sort=asc
-  //       &apikey=${apikey}`
-  //     );
-  //     settransaction(etherscan.data.result);
-  //     console.log(transaction);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     Alert.alert('Problem in fetching Transaction Details');
-  //     setLoading(false);
-  //   }
-  //   getTransaction = function(){
-  //     setexpandActivityStatus(!expandactivityStatus)
-  //   }
-  // };
+
+  async function getTransaction() {
+    const ADDRESS = userwalletaddress;
+    const apikey = 'ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8';
+    const endpoint = 'https://api-testnet.polygonscan.com/api';
+    try {
+      const etherscan = await axios.get(
+        endpoint +
+        `?module=account&action=txlist&address=${ADDRESS}&startblock=0
+        &endblock=99999999
+        &page=1
+        &offset=1000
+        &sort=asc
+        &apikey=${apikey}`
+      );
+      console.log("the data from api is:",etherscan.data);
+      settransaction(etherscan.data.result);
+      // console.log(transaction);
+      setLoading(false);
+    } catch (error) {
+      Alert.alert('Problem in fetching Transaction Details');
+      setLoading(false);
+    }
+    getTransaction = function(){
+      setexpandActivityStatus(!expandactivityStatus)
+    }
+  };
     
     const options = [
         {
@@ -186,8 +193,12 @@ const HomeScreen = ({navigation}) => {
         {transactionActivity ? (
           <>
             <Text>Transaction Activity</Text>
-            {transaction.reverse().map((transaction) => (
-            <TransactionActivityDetails receiver={"eqweqweqweqwewqewqeqwe"} gasPrice={"213"} timeStamp={100000000000000}/>
+            {transaction && transaction.reverse().map((transactions) => (
+            <TransactionActivityDetails                     
+            key={transactions.transactionIndex}
+            receiver={transactions.to}
+            gasPrice={ethers.utils.formatUnits(transactions.value, 18).toString()}
+            timeStamp={transactions.timeStamp}/>
             ))}
           </>
         ) : null}
