@@ -13,10 +13,13 @@ import { useSelector } from 'react-redux';
 import TransactionActivityDetails from '../../components/TransactionActivityDetails';
 
 const HomeScreen = ({navigation}) => {
+    const image = require('../../assets/images/ETH.png');
+
+    const [balance, setBalance] = useState('');
+    const [transaction, settransaction] = useState([]);
 
     const [expanded, setExpanded] = useState(false);
     const [transactionActivity, settransactionActivity] = useState(false);
-    const image = require('../../assets/images/ETH.png');
 
     const userwalletaddress = useSelector((state)=>state.wallet.userwalletAddress)
 
@@ -26,8 +29,59 @@ const HomeScreen = ({navigation}) => {
     const handlePress = () => setExpanded(!expanded);
 
     const ActivityhandlePress = () => {
+      // getTransaction();
       settransactionActivity(!transactionActivity);
     };
+
+    // useEffect(() => {
+    //   getwalletDetails = async () => {
+    //     const provider = new ethers.providers.JsonRpcProvider(
+    //       'https://rpc-mumbai.maticvigil.com',
+    //     );
+    //     // const value = await AsyncStorage.getItem('@private_Key')
+    //     const wallet = new ethers.Wallet(privateKey, provider);
+    //     let total_balance = await wallet.getBalance();
+    //     total_balance = ethers.utils.formatUnits(total_balance, 18).toString();
+    //     console.log('Wallet balance is:', total_balance);
+    //     const api = await axios.get(
+    //       `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`,
+    //     );
+    //     const rate = api.data.ethereum.usd;
+    //     console.log(rate);
+    //     total_balance = parseFloat(total_balance) * parseFloat(rate);
+    //     total_balance = total_balance.toString();
+    //     total_balance = total_balance.slice(0, 6);
+    //     setBalance(total_balance);
+    //   };
+    //   getwalletDetails();
+    // }, []);
+
+    
+  // async function getTransaction() {
+  //   const ADDRESS = walletaddress;
+  //   const apikey = 'ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8';
+  //   const endpoint = 'https://api-testnet.polygonscan.com/api';
+  //   try {
+  //     const etherscan = await axios.get(
+  //       endpoint +
+  //       `?module=account&action=txlist&address=${ADDRESS}&startblock=0
+  //       &endblock=9999999
+  //       &page=1
+  //       &offset=1000
+  //       &sort=asc
+  //       &apikey=${apikey}`
+  //     );
+  //     settransaction(etherscan.data.result);
+  //     console.log(transaction);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     Alert.alert('Problem in fetching Transaction Details');
+  //     setLoading(false);
+  //   }
+  //   getTransaction = function(){
+  //     setexpandActivityStatus(!expandactivityStatus)
+  //   }
+  // };
     
     const options = [
         {
@@ -132,7 +186,9 @@ const HomeScreen = ({navigation}) => {
         {transactionActivity ? (
           <>
             <Text>Transaction Activity</Text>
+            {transaction.reverse().map((transaction) => (
             <TransactionActivityDetails receiver={"eqweqweqweqwewqewqeqwe"} gasPrice={"213"} timeStamp={100000000000000}/>
+            ))}
           </>
         ) : null}
       </ScrollView>

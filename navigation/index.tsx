@@ -27,6 +27,9 @@ import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
 import AddRecipientScreen from "../src/screens/AddRecipientScreen";
 import ReviewandSendScreen from "../src/screens/ReviewandSendScreen";
 import ProfileScreen from "../src/screens/ProfileScreen";
+import EditProfileScreen from "../src/screens/EditProfileScreen";
+import ChangePasswordScreen from "../src/screens/ChangePasswordScreen";
+import PaymentScreen from "../src/screens/PaymentScreen";
 import ModalScreen from "../src/screens/ModalScreen";
 import NotFoundScreen from "../src/screens/NotFoundScreen";
 import TabOneScreen from "../src/screens/TabOneScreen";
@@ -158,12 +161,18 @@ const BottomTab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-
   return (
     <BottomTab.Navigator
       initialRouteName="Wallet"
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarLabelStyle:{
+          marginBottom: 5,
+        },
+        tabBarStyle: {
+          height: 60,
+        }
       }}
     >
       {/* <BottomTab.Screen
@@ -217,9 +226,10 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileNavigation}
         options={{
           title: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome name="user-circle" color={color} size={30} />
           ),
@@ -238,3 +248,51 @@ function BottomTabNavigator() {
 // }) {
 //   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 // }
+
+
+const ProfileNavigation = () => {
+  return(
+    <Stack.Navigator initialRouteName="Profile" >
+    <Stack.Screen
+      options={{
+        headerStyle: {backgroundColor: 'white'},
+        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
+        headerTintColor: 'white',
+        title: 'Profile Information',
+        headerTitleAlign: 'center',
+      }}
+      name="Profile"
+      component={ProfileScreen}
+    />
+    <Stack.Screen
+      options={{
+        headerShown: true,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
+      }}
+      name="Edit Profile"
+      component={EditProfileScreen}
+    />
+  <Stack.Screen
+      options={{
+        headerShown: true,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
+      }}
+      name="Change Password"
+      component={ChangePasswordScreen}
+    />
+        <Stack.Screen
+      options={{
+        headerShown: true,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
+      }}
+      name="Payments"
+      component={PaymentScreen}
+    />
+  </Stack.Navigator>
+
+
+  )
+}
