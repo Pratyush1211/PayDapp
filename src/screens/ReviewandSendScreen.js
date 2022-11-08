@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Alert,ToastAndroid } from 'react-native'
 import React, {useEffect, useState} from 'react'
 // import "@ethersproject/shims"
 // import { ethers } from 'ethers';
@@ -6,7 +6,10 @@ import { Avatar, Divider } from 'react-native-paper';
 // import { useSelector } from 'react-redux';
 
 import PrimaryButton from '../../components/PrimaryButton';
-
+import "@ethersproject/shims";
+import { ethers } from "ethers";
+import axios from "axios";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 const { name, role } = {
   name: 'Freddy Sanchez',
@@ -17,62 +20,50 @@ const { name, role } = {
 export default function ReviewandSendScreen({ navigation, route }) {
 
   const receiverwalletaddress = route.params.receiverwalletaddress;
-  // const senderwalletkey =  useSelector((state)=>state.wallet.walletPrivatekey)
-  // const senderwalletAddress =  useSelector((state)=>state.wallet.walletAddress)
 
-  // const walletprivateKey = route.params.walletprivateKey;
   const amount = route.params.amount;
   const [gasPrice, setGasprice] = useState('');
   const [total, setTotal] = useState('');
+  const connector = useWalletConnect();
+  const senderwalletAddress = connector.accounts[0];
+  const val = parseFloat(amount) * 1000000000000000000;
+
+  useEffect(() => {
+    const connection = async () => {
+      const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
+
+      const feeData = await provider.getFeeData()
+      const gas = ethers.utils.formatUnits(feeData.maxFeePerGas, "ether");
+      setGasprice(ethers.utils.formatUnits(feeData.maxFeePerGas, "ether"));
+      var totalprice = parseFloat(amount) + parseFloat(gas)
+      setTotal(totalprice);
+
+    }
+    connection();
+  }, [])
 
 
-  // useEffect(() => {
-  //   const connection = async () => {
-  //     const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
-  //     // const wallet = new ethers.Wallet(walletprivateKey, provider);
-  //     const feeData = await provider.getFeeData()
-  //     setGasprice(ethers.utils.formatUnits(feeData.maxFeePerGas, "ether"));
-  //     var totalprice = parseFloat(amount) + parseFloat(gasPrice)
-  //     console.log(totalprice)
-  //     setTotal(totalprice);
-  //     console.log(senderwalletkey)
+
+  const send = async () => {
+    try {
+      const tx = await connector.sendTransaction({
+        data: '0x',
+        from: senderwalletAddress,
+        to: receiverwalletaddress,
+        value: val.toString(),
+      });
+
+      //tx.wait();
+      console.log(tx);
+      ToastAndroid.show("Transaction Successful", ToastAndroid.LONG);
+
+      navigation.navigate("Root")
+      
+    } catch (e) {
+      console.error(e);
+    }
+  }
   
-  //   }
-  //   connection();
-  // }, [])
-  
-
-
-
-  //console.log(gasPrice);
-  // const handleSubmit = async () => {
-  //   const provider = new ethers.providers.JsonRpcProvider("https://rpc-mumbai.maticvigil.com");
-  //   // const provider = new ethers.providers.AlchemyProvider("goerli");
-  //   const wallet = new ethers.Wallet(senderwalletkey, provider);
-  //   //Alert.alert("called");
-  //   let tx = {
-  //     to: receiverwalletaddress,
-  //     // Convert currency unit from ether to wei
-  //     value: ethers.utils.parseEther(amount)
-  //   }
-
-  //   // Send a transaction
-  //   try {
-  //     const txObj = await wallet.sendTransaction(tx)
-  //     setTimeout(() => {
-  //       Alert.alert('Transaction Successfully');
-  //       navigation.reset({
-  //         index: 0,
-  //         routes: [{ name: 'TabNav' }],
-  //       });
-  //     }, 1000);
-  //     // => 0x9c172314a693b94853b49dc057cf1cb8e529f29ce0272f451eea8f5741aa9b58
-    
-  //   } catch (error) {
-  //     Alert.alert('Transaction Failed')
-  //   }
-
-  // }
 
   const RecipientDetails = () => (
     <>
@@ -110,7 +101,7 @@ export default function ReviewandSendScreen({ navigation, route }) {
       <SummaryContainer title={'Total'} amount={total} conversionrate={'1.000501 BTC = $44,255.56 USD'} />
       {/* <SummaryContainer title={'Wallet'} /> */}
       <View style={styles.bottom}>
-      <TouchableOpacity onPress={()=>{alert("Sending")}}>
+      <TouchableOpacity onPress={send}>
         <PrimaryButton title={'Send'} />
       </TouchableOpacity>
       </View>

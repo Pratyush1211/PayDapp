@@ -8,7 +8,7 @@ import {Avatar, Divider} from 'react-native-paper';
   const DateDetails = timeStamp => {
     console.log('time is: ', timeStamp);
     var dateFormat = new Date(timeStamp * 1000);
-    console.log(dateFormat);
+    //console.log(dateFormat);
     return (
       'Date: ' +
       dateFormat.getDate() +
@@ -40,7 +40,7 @@ export default function TransactionActivityDetails({
                 To: {receiver.slice(0, 10)}.....
               </Text>
               <Text style={[styles.InfoText, { fontSize: 12 }]}>
-                gasprice: {gasPrice}
+                Amount: {gasPrice}
               </Text>
             </View>
             <Text style={[styles.InfoText, { fontSize: 12 }]}>

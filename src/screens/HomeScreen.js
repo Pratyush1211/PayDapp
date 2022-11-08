@@ -5,9 +5,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Alert,
+  Alert
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import "@ethersproject/shims";
@@ -22,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
 
   const [balance, setBalance] = useState("");
   const [transaction, settransaction] = useState([]);
-
+  const connector = useWalletConnect();
   const [expanded, setExpanded] = useState(false);
   const [transactionActivity, settransactionActivity] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -31,8 +31,8 @@ const HomeScreen = ({ navigation }) => {
     (state) => state.wallet.userwalletAddress
   );
 
-  console.log("Wallet Address of user fetched from redux", userwalletaddress);
-  console.log(typeof userwalletaddress);
+  // console.log("Wallet Address of user fetched from redux", userwalletaddress);
+  //console.log(connector.accounts[0]);
 
   const handlePress = () => setExpanded(!expanded);
 
@@ -41,31 +41,41 @@ const HomeScreen = ({ navigation }) => {
     settransactionActivity(!transactionActivity);
   };
 
-  // useEffect(() => {
-  //   getwalletDetails = async () => {
-  //     const provider = new ethers.providers.JsonRpcProvider(
-  //       'https://rpc-mumbai.maticvigil.com',
-  //     );
-  //     // const value = await AsyncStorage.getItem('@private_Key')
-  //     const wallet = new ethers.Wallet(privateKey, provider);
-  //     let total_balance = await wallet.getBalance();
-  //     total_balance = ethers.utils.formatUnits(total_balance, 18).toString();
-  //     console.log('Wallet balance is:', total_balance);
-  //     const api = await axios.get(
-  //       `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`,
-  //     );
-  //     const rate = api.data.ethereum.usd;
-  //     console.log(rate);
-  //     total_balance = parseFloat(total_balance) * parseFloat(rate);
-  //     total_balance = total_balance.toString();
-  //     total_balance = total_balance.slice(0, 6);
-  //     setBalance(total_balance);
-  //   };
-  //   getwalletDetails();
-  // }, []);
+   useEffect(() => {
+
+    const getwalletDetails = async () => {
+
+      const ADDRESS = await connector.accounts[0];
+      const apikey = 'ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8';
+      const endpoint = 'https://api-testnet.polygonscan.com/api';
+      try {
+        const etherscan = await axios.get(
+          endpoint +
+          `?module=account&action=balance&address=${ADDRESS}&apikey=${apikey}`
+        );
+        console.log(etherscan.data.result);
+        let tempBalance = ethers.utils.formatUnits(etherscan.data.result, 18);
+        setBalance(ethers.utils.formatUnits(etherscan.data.result, 18).toString());
+        const api = await axios.get(
+          `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`,
+        );
+        const rate = api.data.ethereum.usd;
+        console.log(rate);
+        let USDbalance = parseFloat(tempBalance) * parseFloat(rate);
+        tempBalance = USDbalance.toString();
+        console.log(tempBalance)
+        tempBalance = tempBalance.slice(0, 6);
+        setBalance(tempBalance);
+      } catch (error) {
+        //Alert.alert('Problem in fetching Transaction Details');
+      }
+    };
+    getwalletDetails();
+    
+   }, []);
 
   async function getTransaction() {
-    const ADDRESS = "0x31E3239f5305A26672A5923cd2439e1C936A4921";
+    const ADDRESS = connector.accounts[0];
     const apikey = "ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8";
     const endpoint = "https://api-testnet.polygonscan.com/api";
     try {
@@ -127,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.heading}>{title}</Text>
           <Text style={styles.subheading}>{subtitle}</Text>
         </View>
-        <Text style={styles.amountText}>$ {amount}</Text>
+        <Text style={styles.amountText}>$ {balance}</Text>
       </View>
       {expanded ? (
         <View
