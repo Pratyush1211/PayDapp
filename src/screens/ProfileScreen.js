@@ -46,7 +46,7 @@ const ProfileScreen = ({navigation}) => {
 
     const logout = React.useCallback(() => {
         ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
-        navigation.popToTop();
+        navigation.navigate('Login');
         return connector.killSession();
       }, [connector]);
 
