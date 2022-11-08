@@ -55,9 +55,12 @@ export default function ReviewandSendScreen({ navigation, route }) {
 
       //tx.wait();
       console.log(tx);
-      ToastAndroid.show("Transaction Successful", ToastAndroid.LONG);
-
-      navigation.navigate("Root")
+      
+      setTimeout(() => {
+        ToastAndroid.show("Transaction Successful", ToastAndroid.LONG);
+       navigation.navigate("Root")
+      }, 1000);
+      
       
     } catch (e) {
       console.error(e);
