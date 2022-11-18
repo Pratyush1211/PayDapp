@@ -1,4 +1,5 @@
 const crypto = require.resolve('crypto-browserify');
+
 const url = require.resolve('url/');
 module.exports = {
   resolver: {
@@ -13,7 +14,7 @@ module.exports = {
       path: require.resolve('path-browserify'),
       stream: require.resolve('readable-stream'),
       vm: require.resolve('vm-browserify'),
-      sourceExts: ['jsx','js', 'json', 'ts', 'tsx']
+      sourceExts: ['jsx','js', 'json', 'ts', 'tsx', 'cjs']
     },
   },
 };

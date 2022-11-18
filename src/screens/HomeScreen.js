@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -14,6 +13,7 @@ import "@ethersproject/shims";
 import { ethers } from "ethers";
 import axios from "axios";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+
 
 import TransactionActivityDetails from "../../components/TransactionActivityDetails";
 
@@ -31,8 +31,6 @@ const HomeScreen = ({ navigation }) => {
     (state) => state.wallet.userwalletAddress
   );
 
-  // console.log("Wallet Address of user fetched from redux", userwalletaddress);
-  //console.log(connector.accounts[0]);
 
   const handlePress = () => setExpanded(!expanded);
 
@@ -42,9 +40,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
    useEffect(() => {
-
     const getwalletDetails = async () => {
-
       const ADDRESS = await connector.accounts[0];
       const apikey = 'ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8';
       const endpoint = 'https://api-testnet.polygonscan.com/api';
@@ -67,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
         tempBalance = tempBalance.slice(0, 6);
         setBalance(tempBalance);
       } catch (error) {
-        //Alert.alert('Problem in fetching Transaction Details');
+        alert(error);
       }
     };
     getwalletDetails();
@@ -174,11 +170,7 @@ const HomeScreen = ({ navigation }) => {
       >
         {/* Navigate to Pay Screen  */}
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Pay", {
-              walletaddress: walletaddress,
-              walletBalance: 0,
-            })
+          onPress={() => alert("PayScreen is done will be added to navigation in updates")
           }
           style={styles.PayButtonStyle}
         >

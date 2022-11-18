@@ -42,10 +42,10 @@ export default function AddCryptoWallet({ navigation }) {
     console.log(chainId);
   });
 
-  const killSession = React.useCallback(() => {
-    ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
-    return connector.killSession();
-  }, [connector]);
+  // const killSession = React.useCallback(() => {
+  //   ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
+  //   return connector.killSession();
+  // }, [connector]);
 
   // const importData = async () => {
   //   try {
@@ -78,9 +78,9 @@ export default function AddCryptoWallet({ navigation }) {
           </TouchableOpacity>
         </>
       )}
-      <TouchableOpacity onPress={killSession} style={{}}>
+      {/* <TouchableOpacity onPress={killSession} style={{}}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
     </View>
   );
 }

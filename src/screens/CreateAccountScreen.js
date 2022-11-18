@@ -7,8 +7,10 @@ import {
   Dimensions,
   ScrollView,
   Switch,
+  KeyboardAvoidingView
 } from "react-native";
 import React, {useState} from "react";
+import { auth } from '../firebase'
 
 import PrimaryButton from "../../components/PrimaryButton";
 
@@ -25,6 +27,22 @@ export default function CreateAccountScreen({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+
+  const register = () => {
+    auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((authUser) => {
+            authUser.user.updateProfile({
+                displayName: firstname + lastname,
+                phonenumber: phoneno,
+            });
+            if( authUser ){
+              navigation.replace('Add Payment Method')
+            }
+        })
+        .catch((error) => alert(error.message));
+};
 
   return (
     <ScrollView
@@ -101,9 +119,7 @@ export default function CreateAccountScreen({ navigation }) {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => {
-          navigation.navigate("Add Payment Method");
-        }}
+        onPress={register}
       >
         <Text>
           Creating an account{" "}

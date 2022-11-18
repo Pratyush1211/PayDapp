@@ -1,8 +1,5 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
+// navigation flow throughout the app
+
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -11,8 +8,10 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import React, { useEffect } from "react";
+import { ColorSchemeName } from "react-native";
+
+import { auth } from '../src/firebase'
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -21,7 +20,11 @@ import LoginScreen from "../src/screens/LoginScreen";
 import CreateAccountScreen from "../src/screens/CreateAccountScreen";
 import AddPaymentMethodScreen from "../src/screens/AddPaymentMethodScreen";
 import AddCryptoWallet from "../src/screens/AddCryptoWallet";
+import AddCreditCardScreen from "../src/screens/AddCreditCardScreen";
+import AddBankAccount from "../src/screens/AddBankAccount";
 import HomeScreen from "../src/screens/HomeScreen";
+import BuyCoinScreen from "../src/screens/BuyCoinScreen";
+import SellCoinScreen from "../src/screens/SellCoinScreen";
 
 import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
 import AddRecipientScreen from "../src/screens/AddRecipientScreen";
@@ -30,17 +33,6 @@ import ProfileScreen from "../src/screens/ProfileScreen";
 import EditProfileScreen from "../src/screens/EditProfileScreen";
 import ChangePasswordScreen from "../src/screens/ChangePasswordScreen";
 import PaymentScreen from "../src/screens/PaymentScreen";
-import ModalScreen from "../src/screens/ModalScreen";
-import NotFoundScreen from "../src/screens/NotFoundScreen";
-import TabOneScreen from "../src/screens/TabOneScreen";
-import TabTwoScreen from "../src/screens/TabTwoScreen";
-import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
-
 
 export default function Navigation({
   colorScheme,
@@ -57,15 +49,22 @@ export default function Navigation({
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      var userSignedIn = false;
+      if (authUser) {
+          userSignedIn = true;
+      }
+
+    });
+    return unsubscribe;
+  }, []);
+  
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -111,43 +110,102 @@ function RootNavigator() {
         }}
       />
       <Stack.Screen
+        name="Add Credit Card"
+        component={AddCreditCardScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Add Bank Details"
+        component={AddBankAccount}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}
+      />
+      <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
+        name="Buy Coin"
+        component={BuyCoinScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="Sell Coin"
+        component={SellCoinScreen}
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}
       />
       <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
-        <Stack.Screen name="Select Recipient" component={SelectRecepientScreen} options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}/>
-      <Stack.Screen name="Add Recipient" component={AddRecipientScreen} options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}/>
-      <Stack.Screen name="Review & Send" component={ReviewandSendScreen} options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}/>
+        <Stack.Screen
+          name="Select Recipient"
+          component={SelectRecepientScreen}
+          options={{
+            headerShown: true,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              color: "#000",
+              fontWeight: "400",
+              fontSize: 18,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Add Recipient"
+          component={AddRecipientScreen}
+          options={{
+            headerShown: true,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              color: "#000",
+              fontWeight: "400",
+              fontSize: 18,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Review & Send"
+          component={ReviewandSendScreen}
+          options={{
+            headerShown: true,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              color: "#000",
+              fontWeight: "400",
+              fontSize: 18,
+            },
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -167,44 +225,14 @@ function BottomTabNavigator() {
       screenOptions={{
         tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        tabBarLabelStyle:{
+        tabBarLabelStyle: {
           marginBottom: 5,
         },
         tabBarStyle: {
           height: 60,
-        }
+        },
       }}
     >
-      {/* <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      /> */}
-      {/* <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      /> */}
       <BottomTab.Screen
         name="Wallet"
         component={HomeScreen}
@@ -213,7 +241,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="wallet" color={color} size={30} />
           ),
-          tabBarLabel: 'Wallet',
+          tabBarLabel: "Wallet",
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {
@@ -221,7 +249,6 @@ function BottomTabNavigator() {
             fontWeight: "400",
             fontSize: 18,
           },
-          
         }}
       />
       <BottomTab.Screen
@@ -249,50 +276,47 @@ function BottomTabNavigator() {
 //   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 // }
 
-
 const ProfileNavigation = () => {
-  return(
-    <Stack.Navigator initialRouteName="Profile" >
-    <Stack.Screen
-      options={{
-        headerStyle: {backgroundColor: 'white'},
-        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
-        headerTintColor: 'white',
-        title: 'Profile Information',
-        headerTitleAlign: 'center',
-      }}
-      name="Profile"
-      component={ProfileScreen}
-    />
-    <Stack.Screen
-      options={{
-        headerShown: true,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
-      }}
-      name="Edit Profile"
-      component={EditProfileScreen}
-    />
-  <Stack.Screen
-      options={{
-        headerShown: true,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
-      }}
-      name="Change Password"
-      component={ChangePasswordScreen}
-    />
-        <Stack.Screen
-      options={{
-        headerShown: true,
-        headerTitleAlign: 'center',
-        headerTitleStyle: {color: 'black', fontWeight: '400', fontSize: 20},
-      }}
-      name="Payments"
-      component={PaymentScreen}
-    />
-  </Stack.Navigator>
-
-
-  )
-}
+  return (
+    <Stack.Navigator initialRouteName="Profile">
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: "white" },
+          headerTitleStyle: { color: "black", fontWeight: "400", fontSize: 20 },
+          headerTintColor: "white",
+          title: "Profile Information",
+          headerTitleAlign: "center",
+        }}
+        name="Profile"
+        component={ProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: { color: "black", fontWeight: "400", fontSize: 20 },
+        }}
+        name="Edit Profile"
+        component={EditProfileScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: { color: "black", fontWeight: "400", fontSize: 20 },
+        }}
+        name="Change Password"
+        component={ChangePasswordScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: { color: "black", fontWeight: "400", fontSize: 20 },
+        }}
+        name="Payments"
+        component={PaymentScreen}
+      />
+    </Stack.Navigator>
+  );
+};

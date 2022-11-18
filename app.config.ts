@@ -109,8 +109,14 @@ const config: ExpoConfig = {
   ios: {
     "supportsTablet": true
   },
+  extra: {
+    "eas": {
+      "projectId": "f4f14f60-ad0c-477c-a6d0-3c5a2c7f67fd"
+    }
+  },
   android: {
     package: "com.clxyder.testdapp",
+    softwareKeyboardLayoutMode: 'pan',
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff"
