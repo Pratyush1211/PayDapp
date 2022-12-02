@@ -25,6 +25,7 @@ import AddBankAccount from "../src/screens/AddBankAccount";
 import HomeScreen from "../src/screens/HomeScreen";
 import BuyCoinScreen from "../src/screens/BuyCoinScreen";
 import SellCoinScreen from "../src/screens/SellCoinScreen";
+import MarketPlaceScreen from "../src/screens/MarketPlaceScreen";
 
 import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
 import AddRecipientScreen from "../src/screens/AddRecipientScreen";
@@ -52,16 +53,6 @@ export default function Navigation({
 const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      var userSignedIn = false;
-      if (authUser) {
-          userSignedIn = true;
-      }
-
-    });
-    return unsubscribe;
-  }, []);
   
   return (
     <Stack.Navigator initialRouteName="Login">
@@ -242,6 +233,23 @@ function BottomTabNavigator() {
             <Ionicons name="wallet" color={color} size={30} />
           ),
           tabBarLabel: "Wallet",
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            color: "#000",
+            fontWeight: "400",
+            fontSize: 18,
+          },
+        }}
+      />
+       <BottomTab.Screen
+        name="Market"
+        component={MarketPlaceScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="cart" color={color} size={30} />
+          ),
+          tabBarLabel: "Market",
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {

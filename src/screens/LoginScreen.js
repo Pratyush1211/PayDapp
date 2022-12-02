@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { auth } from "../firebase";
+// import { auth } from "../firebase";
 
 import PrimaryButton from "../../components/PrimaryButton";
 
@@ -28,18 +28,18 @@ export default function LoginScreen({ navigation }) {
 //  }, []);
 
 
-  const SignIn = () => {
-    auth
-      .signInWithEmailAndPassword(username, password)
-      .then((authUser) => {
-        if (authUser) {
-          navigation.navigate("Add Payment Method");
-        }
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
+  // const SignIn = () => {
+  //   auth
+  //     .signInWithEmailAndPassword(username, password)
+  //     .then((authUser) => {
+  //       if (authUser) {
+  //         navigation.navigate("Add Payment Method");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // };
 
   return (
     <View style={styles.container}>
@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }) {
         />
       </View>
       <View style={{ marginTop: 30 }}>
-        <TouchableOpacity onPress={SignIn}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Create Account')}}>
           <PrimaryButton title={"Login"} />
         </TouchableOpacity>
       </View>

@@ -29,20 +29,20 @@ export default function CreateAccountScreen({ navigation }) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
 
-  const register = () => {
-    auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((authUser) => {
-            authUser.user.updateProfile({
-                displayName: firstname + lastname,
-                phonenumber: phoneno,
-            });
-            if( authUser ){
-              navigation.replace('Add Payment Method')
-            }
-        })
-        .catch((error) => alert(error.message));
-};
+//   const register = () => {
+//     auth
+//         .createUserWithEmailAndPassword(email, password)
+//         .then((authUser) => {
+//             authUser.user.updateProfile({
+//                 displayName: firstname + lastname,
+//                 phonenumber: phoneno,
+//             });
+//             if( authUser ){
+//               navigation.replace('Add Payment Method')
+//             }
+//         })
+//         .catch((error) => alert(error.message));
+// };
 
   return (
     <ScrollView
@@ -119,7 +119,7 @@ export default function CreateAccountScreen({ navigation }) {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={register}
+        onPress={() => navigation.navigate("Add Payment Method")}
       >
         <Text>
           Creating an account{" "}
