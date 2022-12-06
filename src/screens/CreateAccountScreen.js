@@ -7,11 +7,10 @@ import {
   Dimensions,
   ScrollView,
   Switch,
-  KeyboardAvoidingView
 } from "react-native";
-import React, {useState} from "react";
-import { auth } from '../firebase'
+import React, { useState } from "react";
 
+import { Screenwidth } from "../../constants/Layout";
 import PrimaryButton from "../../components/PrimaryButton";
 
 export default function CreateAccountScreen({ navigation }) {
@@ -26,100 +25,107 @@ export default function CreateAccountScreen({ navigation }) {
   const [password, setpassword] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-
-//   const register = () => {
-//     auth
-//         .createUserWithEmailAndPassword(email, password)
-//         .then((authUser) => {
-//             authUser.user.updateProfile({
-//                 displayName: firstname + lastname,
-//                 phonenumber: phoneno,
-//             });
-//             if( authUser ){
-//               navigation.replace('Add Payment Method')
-//             }
-//         })
-//         .catch((error) => alert(error.message));
-// };
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     <ScrollView
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.inputContainer}>
-        <View>
-          <Text style={styles.LabelText}>First Name</Text>
+      <View
+        style={[
+          {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: Screenwidth * 0.9,
+          },
+        ]}
+      >
+        <View style={[styles.TextContainer, {}]}>
+          <Text>First name</Text>
           <TextInput
-            style={styles.inputText}
+            style={[styles.inputContainer, { width: 165 }]}
+            placeholder="example: John"
             onChangeText={setfirstname}
             value={firstname}
           />
         </View>
-        <View style={{ width: 28 }} />
-        <View>
-          <Text style={styles.LabelText}>Last Name</Text>
+        <View style={[styles.TextContainer]}>
+          <Text>Last name</Text>
           <TextInput
-            style={styles.inputText}
+            style={[styles.inputContainer, { width: 165 }]}
+            placeholder={"example: Doe"}
             onChangeText={setlastname}
             value={lastname}
           />
         </View>
       </View>
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.LabelText}>User name</Text>
+
+      <View style={styles.TextContainer}>
+        <Text>Username</Text>
         <TextInput
-          style={[styles.inputText, { width: inputboxWidth }]}
+          style={styles.inputContainer}
+          placeholder={"Enter username "}
           onChangeText={setusername}
           value={username}
         />
       </View>
 
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.LabelText}>Email Address</Text>
+      <View style={styles.TextContainer}>
+        <Text>Email Address</Text>
         <TextInput
-          style={[styles.inputText, { width: inputboxWidth }]}
-          onChangeText={setemail}
-          value={email}
+          style={styles.inputContainer}
+          placeholder={"Enter username "}
+          onChangeText={setusername}
+          value={username}
         />
       </View>
 
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.LabelText}>Phone Number</Text>
+      <View style={styles.TextContainer}>
+        <Text>Phone Number</Text>
         <TextInput
-          style={[styles.inputText, { width: inputboxWidth }]}
-          onChangeText={setphoneno}
-          value={phoneno}
+          style={styles.inputContainer}
+          placeholder={"Enter username "}
+          onChangeText={setusername}
+          value={username}
         />
       </View>
 
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.LabelText}>Password</Text>
+      <View style={styles.TextContainer}>
+        <Text>Phone Number</Text>
         <TextInput
-          style={[styles.inputText, { width: inputboxWidth }]}
-          onChangeText={setpassword}
-          value={password}
+          style={styles.inputContainer}
+          placeholder={"example: 1234567890"}
+          onChangeText={setusername}
+          value={username}
         />
       </View>
+
       <Text style={styles.InfoText}>
         Password must be a minimum of 8 characters, with one uppercase letter,
         one number, and one special character.
       </Text>
 
       <View
-        style={[styles.inputContainer, { margin: 10, alignItems: "center" }]}
+        style={[
+          styles.inputContainer,
+          {
+            margin: 10,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            borderWidth: 0
+          },
+        ]}
       >
-        <Text style={styles.LabelText}>Enable Biometric Login</Text>
-        <View style={{ width: 150 }} />
-        <Switch         onValueChange={toggleSwitch}
-        value={isEnabled} />
+        <Text>Enable Biometric Login</Text>
+        <Switch onValueChange={toggleSwitch} value={isEnabled} />
       </View>
 
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => navigation.navigate("Add Payment Method")}
+        style={{marginTop: 5}}
       >
         <Text>
           Creating an account{" "}
@@ -140,28 +146,24 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     padding: 12,
   },
-  inputContainer: {
-    flexDirection: "row",
-  },
-  LabelText: {
-    fontWeight: "400",
-    color: "black",
-    fontSize: 14,
-  },
-  inputText: {
-    marginTop: 5,
-    height: 60,
-    width: 160,
-    borderWidth: 0.5,
-    padding: 10,
-    borderRadius: 5,
-  },
-  wideInputContainer: {
-    paddingTop: 28,
-  },
   InfoText: {
     fontSize: 10,
-    margin: 10,
+    marginTop: -10,
+    marginBottom: 10,
     textAlign: "left",
+  },
+  TextContainer: {
+    marginVertical: 15,
+  },
+  inputContainer: {
+    height: 60,
+    width: Screenwidth * 0.9,
+    borderWidth: 1.5,
+    borderRadius: 12,
+    borderColor: "#808080",
+    fontSize: 15,
+    fontWeight: "300",
+    padding: 10,
+    color: "#000",
   },
 });

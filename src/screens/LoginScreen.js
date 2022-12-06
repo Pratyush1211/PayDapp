@@ -7,6 +7,8 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+
+import { Screenwidth } from "../../constants/Layout";
 import React, { useState, useEffect } from "react";
 // import { auth } from "../firebase";
 
@@ -43,28 +45,24 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.InputContainer}>
-        <Text style={styles.LabelText}>User name</Text>
-        <TextInput
-          style={[styles.InputText]}
-          onChangeText={setusername}
-          value={username}
-        />
+
+      <View style={styles.TextContainer}>
+      <Text>Username</Text>
+      <TextInput style={styles.inputContainer} placeholder={'Enter username '} onChangeText={setusername} value={username}/>
       </View>
 
-      <View style={styles.InputContainer}>
-        <Text style={styles.LabelText}>Password</Text>
-        <TextInput
-          style={[styles.InputText]}
-          onChangeText={setpassword}
-          value={password}
-        />
+
+      <View style={styles.TextContainer}>
+      <Text>Password</Text>
+      <TextInput style={styles.inputContainer} />
       </View>
+
       <View style={{ marginTop: 30 }}>
         <TouchableOpacity onPress={()=>{navigation.navigate('Create Account')}}>
           <PrimaryButton title={"Login"} />
         </TouchableOpacity>
       </View>
+
       <Text
         style={{
           textAlign: "center",
@@ -98,21 +96,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  LabelText: {
-    fontWeight: "400",
-    color: "black",
-    fontSize: 14,
+  TextContainer: {
+    marginVertical: 15,
   },
-  InputText: {
-    marginTop: 5,
+  inputContainer: {
     height: 60,
-    width: inputboxWidth,
-    borderWidth: 0.5,
+    width: Screenwidth * 0.90,
+    borderWidth: 1.5,
+    borderRadius: 12,
+    borderColor: '#808080',
+    fontSize: 15,
+    fontWeight: '300',
     padding: 10,
-    borderRadius: 5,
-  },
-  InputContainer: {
-    paddingTop: 35,
+    color: '#000'
   },
   FingerPrintContainer: {
     margin: 40,

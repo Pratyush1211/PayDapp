@@ -1,104 +1,103 @@
-import { StyleSheet, Text, View, TextInput } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TextInput } from "react-native";
+import React, { useState } from "react";
 
-import PrimaryButton from '../../components/PrimaryButton';
+import { Screenwidth } from "../../constants/Layout";
+import PrimaryButton from "../../components/PrimaryButton";
 
-export default function AddCreditCardScreen({navigation}) {
+export default function AddCreditCardScreen({ navigation }) {
+  const [name, setname] = useState("");
+  const [creditcardno, setcreditcardno] = useState("");
+  const [expirationdate, setexpirationdate] = useState("");
+  const [securitycode, setsecuritycode] = useState("");
+  const [zipcode, setzipcode] = useState("");
 
-const [name, setname] = React.useState('');
-const [creditcardno, setcreditcardno] = React.useState('');
-const [expirationdate, setexpirationdate] = React.useState('');
-const [securitycode, setsecuritycode] = React.useState('');
-const [zipcode, setzipcode] = React.useState('');
+  return (
+    // Name of card holder
+    <View style={styles.container}>
 
-
-return (
-    
-// Name of card holder
-  <View style={styles.container}>
-    <View style={styles.wideInputContainer}>
-      <Text style={styles.inputDetailText}>Name on Card</Text>
-      <TextInput
-        style={[styles.input, {width: 350}]}
-        onChangeText={setname}
-        value={name}
-      />
-    </View>
-
-{/* credit card number */}
-    <View style={styles.wideInputContainer}>
-      <Text style={styles.inputDetailText}>CC Number</Text>
-      <TextInput
-        style={[styles.input, {width: 350}]}
-        onChangeText={setcreditcardno}
-        value={creditcardno}
-      />
-    </View>
-
-    <View style={styles.inputContainer}>
-        {/* expiration date of card */}
-      <View>
-        <Text style={styles.inputDetailText}>Expiration Date</Text>
+      <View style={styles.TextContainer}>
+        <Text>Name of card holder</Text>
         <TextInput
-          style={styles.input}
-          onChangeText={setexpirationdate}
-          value={expirationdate}
+          style={styles.inputContainer}
+          placeholder={""}
+          onChangeText={setname}
+          value={name}
         />
       </View>
 
-      {/* Security code of card */}
-      <View>
-        <Text style={styles.inputDetailText}>Security Code</Text>
+      {/* credit card number */}
+      <View style={styles.TextContainer}>
+        <Text>CC Number</Text>
         <TextInput
-          style={styles.input}
-          onChangeText={setsecuritycode}
-          value={securitycode}
+          style={styles.inputContainer}
+          placeholder={""}
+          onChangeText={setcreditcardno}
+          value={creditcardno}
         />
       </View>
-    </View>
 
-    {/* Zip code of card */}
-    <View style={styles.wideInputContainer}>
-      <Text style={styles.inputDetailText}>Zip Code</Text>
-      <TextInput
-        style={[styles.input, {width: 350}]}
-        onChangeText={setzipcode}
-        value={zipcode}
-      />
-    </View>
-    <View style={{justifyContent: 'flex-end', flex: 1, marginBottom: 10}}>
-    <PrimaryButton screen={''} title={'Add Card'} />
-    </View>
+      <View
+        style={[
+          {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: Screenwidth * 0.9,
+          },
+        ]}
+      >
+        <View style={[styles.TextContainer, {}]}>
+          <Text>Set Expiry Date</Text>
+          <TextInput
+            style={[styles.inputContainer, { width: 165 }]}
+            placeholder=""
+            onChangeText={setexpirationdate}
+            value={expirationdate}
+          />
+        </View>
+        <View style={[styles.TextContainer]}>
+          <Text>Last name</Text>
+          <TextInput
+            style={[styles.inputContainer, { width: 165 }]}
+            placeholder={""}
+            onChangeText={setsecuritycode}
+            value={securitycode}
+          />
+        </View>
+      </View>
 
-  </View>
-);
+      <View style={styles.TextContainer}>
+        <Text>Zip Code</Text>
+        <TextInput
+          style={styles.inputContainer}
+          placeholder={" "}
+          onChangeText={setzipcode}
+          value={zipcode}
+        />
+      </View>
+      <View style={{ justifyContent: "flex-end", flex: 1, marginBottom: 10 }}>
+        <PrimaryButton screen={""} title={"Add Card"} />
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-  backgroundColor: 'white',
-  padding: 20,
-},
-inputContainer: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginTop: 20,
-},
-inputDetailText: {
-  fontWeight: '500',
-  color: '#000000',
-  fontSize: 14,
-},
-input: {
-  marginTop: 5,
-  height: 60,
-  width: 170,
-  borderWidth: 0.5,
-  padding: 10,
-  borderRadius: 5,
-},
-wideInputContainer: {
-  paddingTop: 20,
-},
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
+  TextContainer: {
+    marginVertical: 15,
+  },
+  inputContainer: {
+    height: 60,
+    width: Screenwidth * 0.9,
+    borderWidth: 1.5,
+    borderRadius: 12,
+    borderColor: "#808080",
+    fontSize: 15,
+    fontWeight: "300",
+    padding: 10,
+    color: "#000",
+  },
 });

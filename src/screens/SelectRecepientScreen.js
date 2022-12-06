@@ -8,86 +8,107 @@ import {
   Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import {Avatar, Divider} from 'react-native-paper';
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import PrimaryButton from "../../components/PrimaryButton";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const { name, role } = {
+
+const { name, wallet_address } = {
   name: "Freddy Sanchez",
-  role: "freddy_sz12",
+  wallet_address: "freddy_sz12",
 };
+
+const RecipientDetails = () => (
+  <>
+    <View style={styles.AvatarContainer}>
+      <Avatar.Image
+        size={45}
+        source={{
+          uri: 'https://picsum.photos/700',
+        }}
+      />
+      <View style={styles.InfoContainer}>
+        <Text style={styles.InfoText}>{name}</Text>
+        <Text style={[styles.InfoText, {fontSize: 12}]}>{wallet_address}</Text>
+      </View>
+    </View>
+    <Divider style={{height: 1, color: '#AEAEAE', marginTop: 10}} />
+  </>
+);
 
 export default function SelectRecepientScreen({ navigation, route }) {
 
-  const [qrmodalVisible, setQrModalVisible] = useState(false);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [receipient, setreceipient] = useState('');
+  // const [qrmodalVisible, setQrModalVisible] = useState(false);
+  // const [hasPermission, setHasPermission] = useState(null);
   
-  const [scanned, setScanned] = useState(false);
-  const [qrvalue, setQrvalue] = useState("");
+  // const [scanned, setScanned] = useState(false);
+  // const [qrvalue, setQrvalue] = useState("");
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [amount, setamount] = React.useState("");
-  const [loading, setLoading] = useState(false)
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [amount, setamount] = React.useState("");
+  // const [loading, setLoading] = useState(false)
 
-  const getBarCodeScannerPermissions = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
-    setHasPermission(status);
-    console.log(hasPermission)
-    try{
-    if(hasPermission === 'granted'){
-      setQrModalVisible(!qrmodalVisible);
-    }else if (hasPermission === 'denied') {
-      alert('User has denied the permission');
-    }
-    else{
-      alert('No access to camera')
-    }
-  }catch(err){
-    alert(err)
-  }
-  };
+  // const getBarCodeScannerPermissions = async () => {
+  //   const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //   setHasPermission(status);
+  //   console.log(hasPermission)
+  //   try{
+  //   if(hasPermission === 'granted'){
+  //     setQrModalVisible(!qrmodalVisible);
+  //   }else if (hasPermission === 'denied') {
+  //     alert('User has denied the permission');
+  //   }
+  //   else{
+  //     alert('No access to camera')
+  //   }
+  // }catch(err){
+  //   alert(err)
+  // }
+  // };
 
-  const handleBarCodeScanned = ({ type, data }) => {
-      setScanned(true);
-      setQrvalue(data);
-      alert(
-        `Bar code with type ${type} and data ${data} has been scanned!`
-      );
-  };
-
-
-
-  const handleQrModal = () => {
-    setQrModalVisible(!qrmodalVisible);
-    setModalVisible(!modalVisible);
-    setScanned(false);
-  };
+  // const handleBarCodeScanned = ({ type, data }) => {
+  //     setScanned(true);
+  //     setQrvalue(data);
+  //     alert(
+  //       `Bar code with type ${type} and data ${data} has been scanned!`
+  //     );
+  // };
 
 
 
-  const handleSendingAmount = () => {
-    if(qrvalue != '' && amount != ''){
-    setTimeout(() => {
-      navigation.navigate("Review & Send", {
-        receiverwalletaddress: qrvalue,
-        amount: amount,
-      });
-      setLoading(false);
-      setModalVisible(!modalVisible);
-    }, 1000);
-  }else if (qrvalue == '' && amount != ''){
-    alert('Enter sender wallet address')
-  }else if (qrvalue != '' && amount == ''){
-    alert('Enter amount to be send')
-  }
-  };
+  // const handleQrModal = () => {
+  //   setQrModalVisible(!qrmodalVisible);
+  //   setModalVisible(!modalVisible);
+  //   setScanned(false);
+  // };
+
+
+
+  // const handleSendingAmount = () => {
+  //   if(qrvalue != '' && amount != ''){
+  //   setTimeout(() => {
+  //     navigation.navigate("Review & Send", {
+  //       receiverwalletaddress: qrvalue,
+  //       amount: amount,
+  //     });
+  //     setLoading(false);
+  //     setModalVisible(!modalVisible);
+  //   }, 1000);
+  // }else if (qrvalue == '' && amount != ''){
+  //   alert('Enter sender wallet address')
+  // }else if (qrvalue != '' && amount == ''){
+  //   alert('Enter amount to be send')
+  // }
+  // };
 
   return (
     <View style={styles.container}>
 
 
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={false}
         visible={qrmodalVisible}
@@ -180,6 +201,43 @@ export default function SelectRecepientScreen({ navigation, route }) {
         >
           <PrimaryButton title={"Submit"} />
         </TouchableOpacity>
+      </View> */}
+      <TouchableOpacity
+        style={styles.SearchInputContainer}
+        onPress={() => {
+          navigation.navigate('Contacts');
+        }}>
+        <FontAwesome5 name="search" size={20} color="#AEAEAE" />
+        <Text style={[styles.input, {fontWeight: '200', color: '#000'}]}>
+          Search for a contact
+        </Text>
+      </TouchableOpacity>
+      <Divider style={{height: 1, color: '#AEAEAE'}} />
+
+      <TouchableOpacity
+        style={styles.SearchInputContainer}
+        onPress={() => {
+          navigation.navigate('Add Recipient');
+        }}>
+        <FontAwesome5 name="qrcode" size={20} color="#AEAEAE" />
+        <Text style={[styles.input, {fontWeight: '200', color: '#000'}]}>
+          Scan QR code
+        </Text>
+      </TouchableOpacity>
+      <Divider style={{height: 1, color: '#AEAEAE'}} />
+
+      <View style={styles.RecipientContainer}>
+        <Text style={{fontWeight: '600', color: '#121212'}}>
+          Top Recipients
+        </Text>
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
+        <RecipientDetails />
       </View>
     </View>
   );
@@ -188,95 +246,36 @@ export default function SelectRecepientScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
   },
   input: {
     flex: 1,
     padding: 10,
     fontSize: 15,
-    color: "#121212",
-  },
-  InputContainer: {
-    height: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderWidth: 0.2,
-    borderRadius: 10,
-    marginTop: 10,
+    color: '#121212',
   },
   SearchInputContainer: {
-    margin: 20,
     height: 60,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
-    backgroundColor: "#000",
-    borderRadius: 10,
-    justifyContent: "center",
+    width: '100%',
   },
   RecipientContainer: {
     margin: 20,
   },
   AvatarContainer: {
-    borderTopColor: "black",
+    borderTopColor: 'black',
     marginTop: 15,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   InfoContainer: {
     marginLeft: 10,
-    alignItems: "flex-start",
+    alignItems: 'flex-start',
     flex: 1,
   },
   InfoText: {
-    fontSize: 18,
-    color: "black",
-    fontWeight: "400",
-  },
-  QrModalcontainer: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  AmountModalcontainer: {
-    flex: 1,
-    backgroundColor: "#FFF",
-    justifyContent: "center",
-  },
-  header: {
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  headerText: {
-    color: "#000",
-    fontWeight: "400",
-    fontSize: 18,
-  },
-  label: {
     fontSize: 15,
-    fontWeight: "600",
-    color: "#000",
-    margin: 10,
-  },
-  AmountText: {
-    height: 70,
-    borderColor: "black",
-    borderBottomWidth: 0.5,
-    margin: 10,
-    padding: 10,
-    textAlign: 'center',
-    flex: 0.2,
-    fontSize: 25,
-    fontWeight: "600",
-    color: "#000",
-  },
-  ButtonAlignment: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginBottom: 40,
+    color: 'black',
+    fontWeight: '400',
   },
 });

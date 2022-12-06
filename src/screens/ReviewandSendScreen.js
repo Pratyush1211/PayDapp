@@ -22,7 +22,8 @@ const { name, role } = {
 };
 
 export default function ReviewandSendScreen({ navigation, route }) {
-  const receiverwalletaddress = route.params.receiverwalletaddress;
+  const { recipientwalletaddress, recipientname } = { recipientwalletaddress: "0x123456789", recipientname: "John Doe" };
+  const receiverwalletaddress = { recipientwalletaddress };
 
   const amount = route.params.amount;
   const [gasPrice, setGasprice] = useState("");
@@ -135,7 +136,6 @@ export default function ReviewandSendScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
     padding: 20,
   },
   AvatarContainer: {
