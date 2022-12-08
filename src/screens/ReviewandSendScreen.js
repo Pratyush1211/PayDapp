@@ -22,10 +22,8 @@ const { name, role } = {
 };
 
 export default function ReviewandSendScreen({ navigation, route }) {
-  const { recipientwalletaddress, recipientname } = { recipientwalletaddress: "0x123456789", recipientname: "John Doe" };
-  const receiverwalletaddress = { recipientwalletaddress };
+  const { recipientwalletaddress, recipientname , amount} = route.params;
 
-  const amount = route.params.amount;
   const [gasPrice, setGasprice] = useState("");
   const [total, setTotal] = useState("");
   const connector = useWalletConnect();
@@ -55,7 +53,7 @@ export default function ReviewandSendScreen({ navigation, route }) {
       const tx = await connector.sendTransaction({
         data: "0x",
         from: senderwalletAddress,
-        to: receiverwalletaddress,
+        to: recipientwalletaddress,
         value: val.toString(),
       });
 
@@ -74,8 +72,8 @@ export default function ReviewandSendScreen({ navigation, route }) {
   const RecipientDetails = () => (
     <>
       <View style={styles.AvatarContainer}>
-        <Avatar.Text size={80} label={receiverwalletaddress[0]} />
-        <Text style={styles.InfoText}>{receiverwalletaddress}</Text>
+        <Avatar.Text size={80} label={recipientwalletaddress[0]} />
+        <Text style={styles.InfoText}>{recipientwalletaddress}</Text>
         {/* <Text style={[styles.InfoText, { fontSize: 12 }]}>from: {senderwalletAddress.slice(0, 10)}...</Text> */}
       </View>
       <Divider style={{ height: 1, color: "#AEAEAE", marginTop: 10 }} />

@@ -2,10 +2,10 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react'
 
 import PrimaryButton from '../../components/PrimaryButton'
-import Navigation from '../../navigation';
 
-export default function EnterAmountScreen({ navigation }) {
-    const {recipientwalletaddress, recipientname} = { recipientwalletaddress: "0x123456789", recipientname: "John Doe" };
+
+export default function EnterAmountScreen({ navigation, route }) {
+    const {recipientwalletaddress, recipientname} = route.params;
     const [amount, setamount] = useState('');
 
   return (
@@ -20,7 +20,7 @@ export default function EnterAmountScreen({ navigation }) {
         keyboardType={'number-pad'}
       />
       <View style={styles.ButtonAlignment}>
-    <TouchableOpacity onPress={()=> navigation.navigate('Review & Send', { amount: amount})}>
+    <TouchableOpacity onPress={()=> navigation.navigate('Review & Send', { recipientwalletaddress: recipientwalletaddress, recipientname: recipientname, amount: amount,})}>
       <PrimaryButton title={'Next'} />
       </TouchableOpacity>
       </View>

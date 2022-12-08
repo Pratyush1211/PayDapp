@@ -1,40 +1,50 @@
-import {
-  SafeAreaView,
-  Text,
-  View,
-  Button,
-  StyleSheet,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { Text, View, StyleSheet, Button, Alert, Modal, TouchableOpacity, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { BarCodeScanner } from "expo-barcode-scanner";
+import PrimaryButton from "../../components/PrimaryButton";
+import { Screenwidth } from "../../constants/Layout";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-import { BarCodeScanner } from 'expo-barcode-scanner';
-
-export default function AddRecipientScreen({navigation, route}) {
-
+export default function AddRecipientScreen({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [qrvalue, setQrvalue] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [qrvalue, setQrvalue] = useState("");
 
-  // const onBarcodeScan = qrvalue => {
-  //   // Called after te successful scanning of QRCode/Barcode
-  //   setQrvalue(qrvalue);
-  //   setOpneScanner(false);
-  //   navigation.navigate("Enter Amount", { walletaddress: qrvalue});
-    
-  // };
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     };
 
     getBarCodeScannerPermissions();
-  }, []);
+  }, [scanned]);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setQrvalue(data)
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    setQrvalue(data);
+    Alert.alert(
+      "Save as Contact",
+      `Scanned Address is : ${data}. Do you want to save this address as a contact?`,
+      [
+        {
+          text: "Scan Again",
+          onPress: () => setScanned(false),
+        },
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.navigate("Enter Amount", {
+              recipientwalletaddress: data,
+              recipientname: name,
+            });
+          },
+          style: "cancel",
+        },
+        { text: "Save", onPress: () => {setModalVisible(true)} },
+      ]
+    );
   };
 
   if (hasPermission === null) {
@@ -43,7 +53,6 @@ export default function AddRecipientScreen({navigation, route}) {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-
 
   // const onOpneScanner = () => {
   //   // To Start Scanning
@@ -77,14 +86,57 @@ export default function AddRecipientScreen({navigation, route}) {
   //   }
   // };
 
+  const handleSubmit = () => {
+    navigation.navigate("Enter Amount", {
+      recipientwalletaddress: qrvalue,
+      recipientname: name,
+    });
+  }
+
   return (
     <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        // style={StyleSheet.absoluteFillObject}
+        style={{ height: 350, width: 400 }}
       />
-      {scanned && <Text>{qrvalue}</Text>}
-      {scanned && <Button title={'Continue'} onPress={() => setScanned(false)} />}
+      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalView}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              <FontAwesome5 name="arrow-left" size={18} color={"#000"} />
+            </TouchableOpacity>
+            <Text style={styles.modalText}>Add Contact</Text>
+          </View>
+          <View style={{ height: 50 }} />
+          <View style={styles.TextContainer}>
+            <Text>Enter Contact's name</Text>
+            <TextInput style={styles.inputContainer} value={name} onChangeText={setName}/>
+          </View>
+
+          <View style={styles.TextContainer}>
+            <Text>Enter Wallet address</Text>
+            <TextInput style={styles.inputContainer} defaultValue={qrvalue} />
+          </View>
+          <View
+            style={{ flex: 1, justifyContent: "flex-end", marginBottom: 10 }}
+          >
+            <TouchableOpacity onPress={handleSubmit}>
+            <PrimaryButton title={"Add"} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      {scanned && (
+        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+      )}
     </View>
   );
 }
@@ -92,36 +144,44 @@ export default function AddRecipientScreen({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
+    backgroundColor: "white",
+    alignItems: "center",
+    paddingTop: 100,
   },
-  titleText: {
-    fontSize: 22,
-    textAlign: 'center',
-    fontWeight: 'bold',
+  modalView: {
+    backgroundColor: "white",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
   },
-  textStyle: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center',
-    padding: 10,
-    marginTop: 16,
+  header: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#F2F2F2",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingHorizontal: 20,
   },
-  buttonStyle: {
-    borderRadius: 40,
+  modalText: {
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+    marginLeft: 20,
+    alignItems: "center",
+  },
+
+  TextContainer: {
+    marginVertical: 15,
+  },
+  inputContainer: {
     height: 60,
-    width: 60,
-    backgroundColor: '#C5C5C5',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonTextStyle: {
-    padding: 5,
-    color: 'white',
-    textAlign: 'center',
-  },
-  textLinkStyle: {
-    color: 'blue',
-    paddingVertical: 20,
+    width: Screenwidth * 0.9,
+    borderWidth: 1.5,
+    borderRadius: 10,
+    borderColor: "#808080",
+    fontSize: 15,
+    fontWeight: "300",
+    padding: 10,
+    color: "#000",
   },
 });

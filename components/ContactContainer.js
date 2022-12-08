@@ -2,12 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Avatar, Divider } from "react-native-paper";
 
-const { name, wallet_address } = {
-  name: "Freddy Sanchez",
-  wallet_address: "freddy_sz12",
-};
 
-export default function ContactContainer() {
+
+export default function ContactContainer({ name, wallet_address}) {
   return (
     <>
       <View style={styles.AvatarContainer}>

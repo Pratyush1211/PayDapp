@@ -34,6 +34,28 @@ export default function ContactsScreen({ navigation }) {
     });
   }, [navigation]);
 
+
+
+  const contacts = [{
+    id: 1,
+    name: "John Doe",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 2,
+    name: "Jane Doe",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  }
+]
+  const handleSubmit = () => {
+    setModalVisible(!modalVisible);
+    navigation.navigate("Enter Amount", {
+      recipientwalletaddress: walletaddress,
+      recipientname: name,
+    });
+
+  }
+
   return (
     <View style={styles.container}>
 
@@ -47,7 +69,7 @@ export default function ContactsScreen({ navigation }) {
       >
         <View style={styles.modalView}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+            <TouchableOpacity onPress={handleSubmit}>
               <FontAwesome5 name="arrow-left" size={18} color={"#000"} />
             </TouchableOpacity>
             <Text style={styles.modalText}>Add Contact</Text>
@@ -55,26 +77,27 @@ export default function ContactsScreen({ navigation }) {
           <View style={{ height: 50 }} />
           <View style={styles.TextContainer}>
             <Text>Enter Contact's name</Text>
-            <TextInput style={styles.inputContainer} />
+            <TextInput style={styles.inputContainer} value={name} onChangeText={setname} />
           </View>
 
           <View style={styles.TextContainer}>
             <Text>Enter Wallet address</Text>
-            <TextInput style={styles.inputContainer} />
+            <TextInput style={styles.inputContainer} value={walletaddress} onChangeText={setwalletaddress}/>
           </View>
           <View
             style={{ flex: 1, justifyContent: "flex-end", marginBottom: 10 }}
           >
+            <TouchableOpacity onPress={handleSubmit}>
             <PrimaryButton title={"Add"} />
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <TouchableOpacity onPress={()=> navigation.navigate('Enter Amount')}>
-      <ContactContainer />
+      {contacts.map((contact) => (
+      <TouchableOpacity key={contact.id} onPress={()=> { navigation.navigate('Enter Amount', { recipientwalletaddress: contact.walletaddress, recipientname: contact.name})} }>
+      <ContactContainer name={contact.name} wallet_address={contact.walletaddress} />
       </TouchableOpacity>
-      <ContactContainer />
-      <ContactContainer />
-      <ContactContainer />
+      ))}
     </View>
   );
 }
@@ -82,6 +105,7 @@ export default function ContactsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 5,
   },
   modalView: {
     backgroundColor: "white",
