@@ -2,16 +2,10 @@
 
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import { ColorSchemeName } from "react-native";
-
-import { auth } from '../src/firebase'
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -28,108 +22,67 @@ import SellCoinScreen from "../src/screens/SellCoinScreen";
 import MarketPlaceScreen from "../src/screens/MarketPlaceScreen";
 
 import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
+import ContactsScreen from "../src/screens/ContactsScreen";
 import AddRecipientScreen from "../src/screens/AddRecipientScreen";
+import EnterAmountScreen from "../src/screens/EnterAmountScreen";
 import ReviewandSendScreen from "../src/screens/ReviewandSendScreen";
 import ProfileScreen from "../src/screens/ProfileScreen";
 import EditProfileScreen from "../src/screens/EditProfileScreen";
 import ChangePasswordScreen from "../src/screens/ChangePasswordScreen";
 import PaymentScreen from "../src/screens/PaymentScreen";
 
-export default function Navigation({
-  colorScheme,
-}: {
-  colorScheme: ColorSchemeName;
-}) {
+
+
+
+const Stack = createNativeStackNavigator();
+const BottomTab = createBottomTabNavigator();
+
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#000',
+    background: '#FFFFFF',
+  },
+};
+
+export default function Navigation() {
   return (
-    <NavigationContainer
-      // linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
+    <NavigationContainer theme={MyTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
 }
 
-const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
-  
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Create Account"
-        component={CreateAccountScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerTitleStyle: {
+          color: "#000000",
+          fontWeight: "400",
+          fontSize: 18,
+        },
+      }}
+    >
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Create Account" component={CreateAccountScreen} />
       <Stack.Screen
         name="Add Payment Method"
         component={AddPaymentMethodScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
       />
-      <Stack.Screen
-        name="Add Crypto Wallet"
-        component={AddCryptoWallet}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Add Credit Card"
-        component={AddCreditCardScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Add Bank Details"
-        component={AddBankAccount}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
+      <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
+      <Stack.Screen name="Add Credit Card" component={AddCreditCardScreen} />
+      <Stack.Screen name="Add Bank Details" component={AddBankAccount} />
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
-        options={{ headerShown: false }}
+        // options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Buy Coin"
@@ -157,56 +110,21 @@ function RootNavigator() {
           },
         }}
       />
-      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
         <Stack.Screen
           name="Select Recipient"
           component={SelectRecepientScreen}
-          options={{
-            headerShown: true,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              color: "#000",
-              fontWeight: "400",
-              fontSize: 18,
-            },
-          }}
         />
         <Stack.Screen
-          name="Add Recipient"
-          component={AddRecipientScreen}
-          options={{
-            headerShown: true,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              color: "#000",
-              fontWeight: "400",
-              fontSize: 18,
-            },
-          }}
+          name="Contacts"
+          component={ContactsScreen}
         />
-        <Stack.Screen
-          name="Review & Send"
-          component={ReviewandSendScreen}
-          options={{
-            headerShown: true,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              color: "#000",
-              fontWeight: "400",
-              fontSize: 18,
-            },
-          }}
-        />
-      </Stack.Group>
+        <Stack.Screen name="Add Recipient" component={AddRecipientScreen} />
+        <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
+        <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
+
     </Stack.Navigator>
   );
 }
-
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
-const BottomTab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
@@ -242,7 +160,7 @@ function BottomTabNavigator() {
           },
         }}
       />
-       <BottomTab.Screen
+      <BottomTab.Screen
         name="Market"
         component={MarketPlaceScreen}
         options={{

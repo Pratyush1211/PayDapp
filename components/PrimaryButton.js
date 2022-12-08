@@ -11,7 +11,7 @@ export default function PrimaryButton({title}) {
   );
 }
 const screen = Dimensions.get('screen').width;
-const cardWidth = 0.88*screen
+const cardWidth = 0.9*screen
 const styles = StyleSheet.create({
   container: {
     height: 56,

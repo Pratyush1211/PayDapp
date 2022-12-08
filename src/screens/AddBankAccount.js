@@ -1,40 +1,45 @@
 import {StyleSheet, Text, View, TextInput} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import {RadioButton} from 'react-native-paper';
 
+
+import { Screenwidth } from '../../constants/Layout';
 import PrimaryButton from '../../components/PrimaryButton';
 
 
 export default function AddBankAccount({navigation}) {
-  const [routingnumber, setrouting] = React.useState('');
-  const [accountno, setaccountno] = React.useState('');
-  const [checked, setChecked] = React.useState('first');
+  const [name, setname] = useState('');
+  const [accountno, setaccountno] = useState('');
+  const [checked, setChecked] = useState('first');
 
   return (
     // Routing Number
     <View style={styles.container}>
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.inputDetailText}>Name on Card</Text>
+
+<View style={styles.TextContainer}>
+        <Text>Name of card holder</Text>
         <TextInput
-          style={[styles.input, {width: 350}]}
-          onChangeText={setrouting}
-          value={routingnumber}
+          style={styles.inputContainer}
+          placeholder={""}
+          onChangeText={setname}
+          value={name}
         />
       </View>
 
-      {/* Account number */}
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.inputDetailText}>CC Number</Text>
+
+      <View style={styles.TextContainer}>
+        <Text>CC Number</Text>
         <TextInput
-          style={[styles.input, {width: 350}]}
+          style={styles.inputContainer}
+          placeholder={""}
           onChangeText={setaccountno}
           value={accountno}
         />
       </View>
 
-      <View style={styles.wideInputContainer}>
-        <Text style={styles.inputDetailText}>Account type</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={[styles.TextContainer, { width: Screenwidth*0.9}]}>
+        <Text>Account type</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between',}}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -8}}>
             <RadioButton
               value="first"
@@ -69,28 +74,20 @@ export default function AddBankAccount({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    padding: 20,
+    alignItems: 'center',
+  },
+  TextContainer: {
+    marginVertical: 15,
   },
   inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  inputDetailText: {
-    fontWeight: '500',
-    color: '#000000',
-    fontSize: 14,
-  },
-  input: {
-    marginTop: 10,
     height: 60,
-    width: 170,
-    borderWidth: 0.5,
+    width: Screenwidth * 0.9,
+    borderWidth: 1.5,
+    borderRadius: 12,
+    borderColor: "#808080",
+    fontSize: 15,
+    fontWeight: "300",
     padding: 10,
-    borderRadius: 5,
-  },
-  wideInputContainer: {
-    paddingTop: 20,
+    color: "#000",
   },
 });

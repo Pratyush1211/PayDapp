@@ -42,23 +42,6 @@ export default function AddCryptoWallet({ navigation }) {
     console.log(chainId);
   });
 
-  // const killSession = React.useCallback(() => {
-  //   ToastAndroid.show("Wallet disconnected sucessfully", ToastAndroid.LONG);
-  //   return connector.killSession();
-  // }, [connector]);
-
-  // const importData = async () => {
-  //   try {
-  //     const keys = await AsyncStorage.getAllKeys();
-  //     console.log("key is:",keys);
-  //     const result = await AsyncStorage.multiGet(keys);
-  
-  //     return console.log(result);
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
-
   return (
     <View style={styles.container}>
       {!connector.connected && (
@@ -73,9 +56,11 @@ export default function AddCryptoWallet({ navigation }) {
             title={connector.peerMeta?.name}
             NetworkId={connector.peerMeta?.description}
           />
+          <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("Root")}>
             <PrimaryButton title={"Continue"} />
           </TouchableOpacity>
+          </View>
         </>
       )}
       {/* <TouchableOpacity onPress={killSession} style={{}}>
@@ -88,8 +73,13 @@ export default function AddCryptoWallet({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
     alignItems: "center",
-    paddingVertical: 50,
+    paddingTop: 150,
   },
+  buttonContainer: {
+    flex:1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginBottom: 36
+  }
 });
