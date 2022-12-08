@@ -10,8 +10,8 @@ import {
 import React, { useState, useEffect } from "react";
 import {Avatar, Divider} from 'react-native-paper';
 
-import { BarCodeScanner } from "expo-barcode-scanner";
-import PrimaryButton from "../../components/PrimaryButton";
+import ContactContainer from "../../components/ContactContainer";
+import { Screenwidth } from "../../constants/Layout";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 
@@ -103,6 +103,19 @@ export default function SelectRecepientScreen({ navigation, route }) {
   //   alert('Enter amount to be send')
   // }
   // };
+
+
+  const contacts = [{
+    id: 1,
+    name: "John Doe",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 2,
+    name: "Jane Doe",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  }
+]
 
   return (
     <View style={styles.container}>
@@ -230,14 +243,11 @@ export default function SelectRecepientScreen({ navigation, route }) {
         <Text style={{fontWeight: '600', color: '#121212'}}>
           Top Recipients
         </Text>
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
-        <RecipientDetails />
+        {contacts.map((contact) => (
+      <TouchableOpacity key={contact.id} onPress={()=> { navigation.navigate('Enter Amount', { recipientwalletaddress: contact.walletaddress, recipientname: contact.name})} }>
+      <ContactContainer name={contact.name} wallet_address={contact.walletaddress} />
+      </TouchableOpacity>
+      ))}
       </View>
     </View>
   );
