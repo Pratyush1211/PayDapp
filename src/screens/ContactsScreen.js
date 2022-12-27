@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  SectionList
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { Screenwidth } from "../../constants/Layout";
-import ContactContainer from "../../components/ContactContainer";
 import PrimaryButton from "../../components/PrimaryButton";
 
 export default function ContactsScreen({ navigation }) {
@@ -25,8 +25,8 @@ export default function ContactsScreen({ navigation }) {
           style={{ marginRight: 0, flexDirection: "row", alignItems: "center" }}
           onPress={() => setModalVisible(true)}
         >
-          <FontAwesome5 name="plus" size={15} color={"#000"} />
-          <Text style={{ color: "#000", fontSize: 12, marginHorizontal: 5 }}>
+          <FontAwesome5 name="plus" size={10} color={"#000"} />
+          <Text style={{ color: "#000", fontSize: 10, marginHorizontal: 5 }}>
             Add Contact
           </Text>
         </TouchableOpacity>
@@ -38,15 +38,85 @@ export default function ContactsScreen({ navigation }) {
 
   const contacts = [{
     id: 1,
-    name: "John Doe",
+    name: "Kriti Motha",
     walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
   },
   {
     id: 2,
-    name: "Jane Doe",
+    name: "Richa Motha",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 131,
+    name: "Aman Kumar Sinha",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id:1232,
+    name: "Vikas Mishra",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 2,
+    name: "Ahona saha",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+
+  {
+    id: 3,
+    name: "Karan Yuvraj Singh",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 4,
+    name: "Chandramoli Pratap Singh Khatri",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 5,
+    name: "Shivansh Goel",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 6,
+    name: "Vanshika Mishra",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 7,
+    name: "Shaan Sundar",
+    walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
+  },
+  {
+    id: 8,
+    name: "Pratyush Motha",
     walletaddress: "0xB9d35811424600fa9E8cD62A0471fBd025131cb8",
   }
 ]
+
+
+  const getData = () => {
+    let contactscollection = []
+    let aCode = "A".charCodeAt(0)
+    for (let i = 0; i < 26; i++) {
+      let currentCharacter = String.fromCharCode(aCode + i)
+      let obj = {
+        title : currentCharacter
+      }
+
+      let currentContact = contacts.filter(item => {
+        return item.name[0].toUpperCase() === currentCharacter
+      })
+      if( currentContact.length > 0 ){
+        currentContact.sort((a,b) => a.name.localeCompare(b.name))
+        obj.data = currentContact
+        contactscollection.push(obj)
+      }
+    }
+    return contactscollection
+    }
+
+
   const handleSubmit = () => {
     setModalVisible(!modalVisible);
     navigation.navigate("Enter Amount", {
@@ -93,11 +163,28 @@ export default function ContactsScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-      {contacts.map((contact) => (
+      {/* {contacts.map((contact) => (
       <TouchableOpacity key={contact.id} onPress={()=> { navigation.navigate('Enter Amount', { recipientwalletaddress: contact.walletaddress, recipientname: contact.name})} }>
       <ContactContainer name={contact.name} wallet_address={contact.walletaddress} />
       </TouchableOpacity>
-      ))}
+      ))} */}
+      <SectionList
+        sections={getData()}
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <TouchableOpacity onPress={()=> { navigation.navigate('Enter Amount', { recipientwalletaddress: item.walletaddress, recipientname: item.name})} }>
+            <Text>{item.name}</Text>
+            <Text style={{fontSize: 10, includeFontPadding: true}}>{item.walletaddress}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        renderSectionHeader={({ section }) => (
+          <View style={styles.sectionHeader}>
+            <Text>{section.title}</Text>
+          </View>
+        )}
+        keyExtractor={ item => item.id } 
+      />
     </View>
   );
 }
@@ -112,6 +199,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
     width: "100%",
+  },
+  row: {
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  sectionHeader: {
+    backgroundColor: "#efefef",
+    paddingHorizontal: 20,
+    paddingVertical: 10
   },
   header: {
     width: "100%",
