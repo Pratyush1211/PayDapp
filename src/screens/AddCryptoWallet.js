@@ -1,21 +1,19 @@
-import { StyleSheet, View, ToastAndroid, TouchableOpacity, Text } from "react-native";
-import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  ToastAndroid,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import React from "react";
 import { useDispatch } from "react-redux";
 
+// components
 import WalletDetails from "../../components/WalletDetails";
 import PrimaryButton from "../../components/PrimaryButton";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setWalletAddress } from "../redux/slices/walletSlice";
-
-
-const shortenAddress = (address) => {
-  return `${address.slice(0, 6)}...${address.slice(
-    address.length - 4,
-    address.length
-  )}`;
-};
 
 export default function AddCryptoWallet({ navigation }) {
   const connector = useWalletConnect();
@@ -34,7 +32,6 @@ export default function AddCryptoWallet({ navigation }) {
     if (error) {
       throw error;
     }
-
     // Get provided accounts and chainId
     const { accounts, chainId } = payload.params[0];
     dispatch(setWalletAddress(accounts[0]));
@@ -42,11 +39,21 @@ export default function AddCryptoWallet({ navigation }) {
     console.log(chainId);
   });
 
+  const logout = React.useCallback(() => {
+    ToastAndroid.show(
+      "User and Wallet disconnected sucessfully",
+      ToastAndroid.LONG
+    );
+    return connector.killSession();
+  }, [connector]);
+
   return (
     <View style={styles.container}>
       {!connector.connected && (
         <TouchableOpacity onPress={connectWallet}>
-          <PrimaryButton title={"Connect a wallet"} />
+          <View style={styles.Button}>
+            <Text style={styles.buttonTextStyle}>Connect your Wallet !</Text>
+          </View>
         </TouchableOpacity>
       )}
       {!!connector.connected && (
@@ -57,15 +64,12 @@ export default function AddCryptoWallet({ navigation }) {
             NetworkId={connector.peerMeta?.description}
           />
           <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("Root")}>
-            <PrimaryButton title={"Continue"} />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Root")}>
+              <PrimaryButton title={"Continue"} />
+            </TouchableOpacity>
           </View>
         </>
       )}
-      {/* <TouchableOpacity onPress={killSession} style={{}}>
-            <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity> */}
     </View>
   );
 }
@@ -76,10 +80,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 150,
   },
+  Button: {
+    backgroundColor: "#F9A826",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
   buttonContainer: {
-    flex:1,
+    flex: 1,
     alignItems: "center",
     justifyContent: "flex-end",
-    marginBottom: 36
-  }
+    marginBottom: 30,
+  },
 });

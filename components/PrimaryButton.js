@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
   container: {
     height: 56,
     width: cardWidth,
-    backgroundColor: '#000000',
+    backgroundColor: '#0070E0',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 5,
     marginTop: 10,
   },
   PrimaryText: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '600',
     color: '#FFFFFF',
   },
 });

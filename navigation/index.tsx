@@ -4,15 +4,13 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
-import { ColorSchemeName } from "react-native";
+import React from "react";
 
-import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
 import LoginScreen from "../src/screens/LoginScreen";
 import CreateAccountScreen from "../src/screens/CreateAccountScreen";
-import AddPaymentMethodScreen from "../src/screens/AddPaymentMethodScreen";
+
 import AddCryptoWallet from "../src/screens/AddCryptoWallet";
 import AddCreditCardScreen from "../src/screens/AddCreditCardScreen";
 import AddBankAccount from "../src/screens/AddBankAccount";
@@ -43,7 +41,7 @@ const MyTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#000',
-    background: '#FFFFFF',
+    background: '#FFF',
   },
 };
 
@@ -70,12 +68,8 @@ function RootNavigator() {
         },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
       <Stack.Screen name="Create Account" component={CreateAccountScreen} />
-      <Stack.Screen
-        name="Add Payment Method"
-        component={AddPaymentMethodScreen}
-      />
       <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
       <Stack.Screen name="Add Credit Card" component={AddCreditCardScreen} />
       <Stack.Screen name="Add Bank Details" component={AddBankAccount} />

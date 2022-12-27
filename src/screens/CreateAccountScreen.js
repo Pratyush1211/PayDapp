@@ -124,7 +124,7 @@ export default function CreateAccountScreen({ navigation }) {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate("Add Payment Method")}
+        onPress={() => navigation.navigate("Add Crypto Wallet")}
         style={{marginTop: 5}}
       >
         <Text>

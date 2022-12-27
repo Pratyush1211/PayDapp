@@ -1,37 +1,27 @@
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Avatar } from "react-native-paper"
+import { Avatar } from "react-native-paper";
+import { Screenwidth } from "../constants/Layout";
 
-const image = require("../assets/images/metamask.png");
-const WalletDetails = ({
-  title,
-  NetworkId,
-  address,
-}) => {
+const WalletDetails = ({ title, NetworkId, address }) => {
   return (
     <>
       <View style={styles.cardContainer}>
-        <View style={styles.MethodContainer}>
-          <View style={styles.ImageContainer}>
-            <Avatar.Image
-              style={styles.ImageContainer}
-              size={60}
-              source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/120px-MetaMask_Fox.svg.png',
-              }}
-            />
 
-          </View>
-          <View style={styles.TextAlignment}>
-            <Text style={styles.heading}>{title}</Text>
-            <Text style={{ fontSize: 12 }}>{NetworkId}</Text>
-          </View>
-        </View>
-        <View>
-          <Text style={{ marginLeft: 15, color: "#000", fontSize: 12, fontWeight: '400' }}>
-            Your Wallet Address: {address}
-          </Text>
-        </View>
+          <Avatar.Image
+            style={styles.ImageContainer}
+            size={60}
+            source={{
+              uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/120px-MetaMask_Fox.svg.png",
+            }}
+          />
+
+        <Text style={styles.heading}>{title}</Text>
+        <Text style={{ fontSize: 12 }}>{NetworkId}</Text>
+        <Text style={styles.heading}>
+          Your Wallet Address:
+        </Text>
+        <Text style={{ fontSize: 12 }}>{address}</Text>
       </View>
     </>
   );
@@ -39,34 +29,24 @@ const WalletDetails = ({
 
 export default WalletDetails;
 
-const screen = Dimensions.get("screen").width;
-const CardWidth = 0.85 * screen;
-
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "white",
     margin: 20,
-    padding: 10,
-    height: 130,
-    width: CardWidth,
-    borderRadius: 10,
-    elevation: 3,
-  },
-  MethodContainer: {
-    flexDirection: "row",
+    height: 250,
+    width: Screenwidth * 0.9,
+    borderRadius: 40,
     alignItems: "center",
+    justifyContent: 'center'
   },
   ImageContainer: {
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent",
   },
   heading: {
     fontSize: 15,
     fontWeight: "600",
     color: "#121212",
+    marginVertical: 10
   },
-  TextAlignment: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
+
 });
