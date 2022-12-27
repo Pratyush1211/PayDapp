@@ -12,8 +12,7 @@ import LoginScreen from "../src/screens/LoginScreen";
 import CreateAccountScreen from "../src/screens/CreateAccountScreen";
 
 import AddCryptoWallet from "../src/screens/AddCryptoWallet";
-import AddCreditCardScreen from "../src/screens/AddCreditCardScreen";
-import AddBankAccount from "../src/screens/AddBankAccount";
+
 import HomeScreen from "../src/screens/HomeScreen";
 import BuyCoinScreen from "../src/screens/BuyCoinScreen";
 import SellCoinScreen from "../src/screens/SellCoinScreen";
@@ -29,19 +28,15 @@ import EditProfileScreen from "../src/screens/EditProfileScreen";
 import ChangePasswordScreen from "../src/screens/ChangePasswordScreen";
 import PaymentScreen from "../src/screens/PaymentScreen";
 
-
-
-
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
-
 
 const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#000',
-    background: '#FFF',
+    primary: "#000",
+    background: "#FFF",
   },
 };
 
@@ -52,7 +47,6 @@ export default function Navigation() {
     </NavigationContainer>
   );
 }
-
 
 function RootNavigator() {
   return (
@@ -68,11 +62,13 @@ function RootNavigator() {
         },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Create Account" component={CreateAccountScreen} />
       <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
-      <Stack.Screen name="Add Credit Card" component={AddCreditCardScreen} />
-      <Stack.Screen name="Add Bank Details" component={AddBankAccount} />
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
@@ -104,18 +100,11 @@ function RootNavigator() {
           },
         }}
       />
-        <Stack.Screen
-          name="Select Recipient"
-          component={SelectRecepientScreen}
-        />
-        <Stack.Screen
-          name="Contacts"
-          component={ContactsScreen}
-        />
-        <Stack.Screen name="Add Recipient" component={AddRecipientScreen} />
-        <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
-        <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
-
+      <Stack.Screen name="Select Recipient" component={SelectRecepientScreen} />
+      <Stack.Screen name="Contacts" component={ContactsScreen} />
+      <Stack.Screen name="Add Recipient" component={AddRecipientScreen} />
+      <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
+      <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
     </Stack.Navigator>
   );
 }
@@ -184,7 +173,6 @@ function BottomTabNavigator() {
     </BottomTab.Navigator>
   );
 }
-
 
 const ProfileNavigation = () => {
   return (
