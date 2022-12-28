@@ -5,9 +5,7 @@ import { Avatar, Divider } from "react-native-paper";
 
 // displaying date from timestamp in Transaction Activity Details card
 const DateDetails = (timeStamp) => {
-  console.log("time is: ", timeStamp);
   var dateFormat = new Date(timeStamp * 1000);
-  //console.log(dateFormat);
   return (
     "Date: " +
     dateFormat.getDate() +
@@ -36,7 +34,7 @@ export default function TransactionActivityDetails({
           <View style={{ flex: 1, justifyContent: "center", marginLeft: 10 }}>
             <View style={styles.TransactionDetailsAlignment}>
               <Text style={styles.InfoText}>
-                To: {receiver.slice(0, 10)}.....
+                To: {receiver.slice(0, 15)}.....
               </Text>
               <Text style={[styles.InfoText, { fontSize: 12 }]}>
                 Amount: {gasPrice}
@@ -69,6 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "black",
     fontWeight: "400",
+    fontFamily: "Poppins-Regular",
   },
   TransactionDetailsAlignment: {
     justifyContent: "space-between",

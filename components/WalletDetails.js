@@ -10,18 +10,18 @@ const WalletDetails = ({ title, NetworkId, address }) => {
 
           <Avatar.Image
             style={styles.ImageContainer}
-            size={60}
+            size={70}
             source={{
               uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/120px-MetaMask_Fox.svg.png",
             }}
           />
 
         <Text style={styles.heading}>{title}</Text>
-        <Text style={{ fontSize: 12 }}>{NetworkId}</Text>
+        <Text style={{ fontSize: 15, fontFamily: 'Poppins-Regular' }}>{NetworkId}</Text>
         <Text style={styles.heading}>
           Your Wallet Address:
         </Text>
-        <Text style={{ fontSize: 12 }}>{address}</Text>
+        <Text style={{ fontSize: 14 }}>{address}</Text>
       </View>
     </>
   );
@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   heading: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: "600",
     color: "#121212",
-    marginVertical: 10
+    marginVertical: 10,
+    fontFamily: "Poppins-Semibold",
   },
 
 });

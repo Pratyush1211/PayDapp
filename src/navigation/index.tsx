@@ -5,28 +5,26 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { useFonts } from "expo-font";
 
-import useColorScheme from "../hooks/useColorScheme";
+import LoginScreen from "../screens/LoginScreen";
+import CreateAccountScreen from "../screens/CreateAccountScreen";
+import AddCryptoWallet from "../screens/AddCryptoWallet";
 
-import LoginScreen from "../src/screens/LoginScreen";
-import CreateAccountScreen from "../src/screens/CreateAccountScreen";
+import HomeScreen from "../screens/HomeScreen";
+import BuyCoinScreen from "../screens/BuyCoinScreen";
+import SellCoinScreen from "../screens/SellCoinScreen";
+import MarketPlaceScreen from "../screens/MarketPlaceScreen";
 
-import AddCryptoWallet from "../src/screens/AddCryptoWallet";
-
-import HomeScreen from "../src/screens/HomeScreen";
-import BuyCoinScreen from "../src/screens/BuyCoinScreen";
-import SellCoinScreen from "../src/screens/SellCoinScreen";
-import MarketPlaceScreen from "../src/screens/MarketPlaceScreen";
-
-import SelectRecepientScreen from "../src/screens/SelectRecepientScreen";
-import ContactsScreen from "../src/screens/ContactsScreen";
-import AddRecipientScreen from "../src/screens/AddRecipientScreen";
-import EnterAmountScreen from "../src/screens/EnterAmountScreen";
-import ReviewandSendScreen from "../src/screens/ReviewandSendScreen";
-import ProfileScreen from "../src/screens/ProfileScreen";
-import EditProfileScreen from "../src/screens/EditProfileScreen";
-import ChangePasswordScreen from "../src/screens/ChangePasswordScreen";
-import PaymentScreen from "../src/screens/PaymentScreen";
+import SelectRecepientScreen from "../screens/SelectRecepientScreen";
+import ContactsScreen from "../screens/ContactsScreen";
+import AddRecipientScreen from "../screens/AddRecipientScreen";
+import EnterAmountScreen from "../screens/EnterAmountScreen";
+import ReviewandSendScreen from "../screens/ReviewandSendScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import ChangePasswordScreen from "../screens/ChangePasswordScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -41,6 +39,10 @@ const MyTheme = {
 };
 
 export default function Navigation() {
+  const [loaded] = useFonts({
+    'Poppins-Regular' : require('../assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Semibold' : require('../assets/fonts/Poppins-SemiBold.ttf') 
+  })
   return (
     <NavigationContainer theme={MyTheme}>
       <RootNavigator />
@@ -56,9 +58,9 @@ function RootNavigator() {
         headerShown: true,
         headerTitleAlign: "center",
         headerTitleStyle: {
-          color: "#000000",
-          fontWeight: "400",
-          fontSize: 18,
+          color: "#000",
+          fontSize: 20,
+          fontFamily: 'Poppins-Semibold',
         },
       }}
     >
@@ -72,7 +74,7 @@ function RootNavigator() {
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
-        // options={{ headerShown: false }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Buy Coin"
@@ -110,35 +112,37 @@ function RootNavigator() {
 }
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
   return (
     <BottomTab.Navigator
       initialRouteName="Wallet"
       screenOptions={{
         tabBarHideOnKeyboard: true,
-        tabBarLabelStyle: {
-          marginBottom: 5,
-        },
         tabBarStyle: {
           height: 60,
         },
+        tabBarLabelStyle: {
+          fontFamily: 'Poppins-Semibold',
+          marginBottom: 5
+        },
+      
       }}
     >
       <BottomTab.Screen
         name="Wallet"
         component={HomeScreen}
         options={{
-          title: "Metamask Wallet",
           tabBarIcon: ({ color }) => (
             <Ionicons name="wallet" color={color} size={30} />
           ),
           tabBarLabel: "Wallet",
           headerShown: true,
+          headerTitle: 'Metamask Wallet',
           headerTitleAlign: "center",
           headerTitleStyle: {
             color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
+            fontSize: 20,
+            fontFamily: 'Poppins-Semibold',
+            marginTop: 10,
           },
         }}
       />

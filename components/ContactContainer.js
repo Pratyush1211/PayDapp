@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
   InfoText: {
     fontSize: 15,
     color: "black",
-    fontWeight: "400",
+    fontFamily: 'Poppins-Regular'
   },
 });
