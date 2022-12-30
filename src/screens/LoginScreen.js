@@ -8,42 +8,30 @@ import {
   Dimensions,
 } from "react-native";
 import { Screenwidth } from "../../constants/Layout";
-import React, { useState, useEffect } from "react";
-import { auth, db } from "../services/firebase";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { login } from "../redux/slices/AuthenticationSlice";
+
+
+
 import PrimaryButton from "../../components/PrimaryButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const FingerPrint = require("../../assets/images/fingerprint.png");
 
 export default function LoginScreen({ navigation }) {
-  const [username, setusername] = useState("");
+
+  const [email, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
 
-  
-  const SignIn = () => {
-    auth
-    .signInWithEmailAndPassword(username,password)
-    .then((userCredential) => {
-      // Signed in 
-      var user = userCredential;
-      var uid = userCredential.user.uid
-      var userDetails = db.collection('users').doc(uid)
-      userDetails.get().then((doc) => {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-      }).catch((error) => {
-        console.log("Error getting document:", error);
-      })
-    })
-    .catch(error=>alert("Register on App first or enter the credential carefully "));
+  const dispatch = useDispatch();
 
-
-};
+  const handleLogin = () => {
+    dispatch(login({ email, password })
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -71,7 +59,7 @@ export default function LoginScreen({ navigation }) {
           placeholder={" @gmail.com "}
           placeholderTextColor={"#808080"}
           onChangeText={setusername}
-          value={username}
+          value={email}
         />
       </View>
 
@@ -99,7 +87,7 @@ export default function LoginScreen({ navigation }) {
       <View style={{ marginTop: 30 }}>
         <TouchableOpacity
           onPress={() => {
-            SignIn();
+            handleLogin();
           }}
         >
           <PrimaryButton title={"Login"} />

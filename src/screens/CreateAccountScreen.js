@@ -45,6 +45,7 @@ export default function CreateAccountScreen({ navigation }) {
               .then((userCredential) => {
                 // Signed in
                 var user = userCredential;
+                console.log(user)
                 var uid = userCredential.user.uid;
                 var userDetails = db.collection("users").doc(uid);
                 userDetails
