@@ -1,9 +1,9 @@
 // navigation flow throughout the app
+import React from "react";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
 
 import LoginScreen from "../screens/LoginScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
@@ -24,6 +24,8 @@ import EditProfileScreen from "../screens/EditProfileScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 
+import { useSelector } from "react-redux";
+
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
@@ -37,7 +39,6 @@ const MyTheme = {
 };
 
 export default function Navigation() {
-
   return (
     <NavigationContainer theme={MyTheme}>
       <RootNavigator />
@@ -46,62 +47,73 @@ export default function Navigation() {
 }
 
 function RootNavigator() {
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
   return (
     <Stack.Navigator
-      initialRouteName="Login"
       screenOptions={{
         headerShown: true,
         headerTitleAlign: "center",
         headerTitleStyle: {
           color: "#000",
           fontSize: 20,
-          fontFamily: 'Poppins-Semibold',
+          fontFamily: "Poppins-Semibold",
         },
       }}
     >
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="Create Account" component={CreateAccountScreen} />
-      <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Buy Coin"
-        component={BuyCoinScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Sell Coin"
-        component={SellCoinScreen}
-        options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-            color: "#000",
-            fontWeight: "400",
-            fontSize: 18,
-          },
-        }}
-      />
-      <Stack.Screen name="Select Recipient" component={SelectRecepientScreen} />
-      <Stack.Screen name="Contacts" component={ContactsScreen} />
-      <Stack.Screen name="Add Recipient" component={AddRecipientScreen} />
-      <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
-      <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
+      {!isLoggedIn ? (
+        <>
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Create Account" component={CreateAccountScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
+          <Stack.Screen
+            name="Root"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Buy Coin"
+            component={BuyCoinScreen}
+            options={{
+              headerShown: true,
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                color: "#000",
+                fontWeight: "400",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Sell Coin"
+            component={SellCoinScreen}
+            options={{
+              headerShown: true,
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                color: "#000",
+                fontWeight: "400",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Select Recipient"
+            component={SelectRecepientScreen}
+          />
+          <Stack.Screen name="Contacts" component={ContactsScreen} />
+          <Stack.Screen name="Add Recipient" component={AddRecipientScreen} />
+          <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
+          <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }
@@ -116,10 +128,9 @@ function BottomTabNavigator() {
           height: 60,
         },
         tabBarLabelStyle: {
-          fontFamily: 'Poppins-Semibold',
-          marginBottom: 5
+          fontFamily: "Poppins-Semibold",
+          marginBottom: 5,
         },
-      
       }}
     >
       <BottomTab.Screen
@@ -131,12 +142,12 @@ function BottomTabNavigator() {
           ),
           tabBarLabel: "Wallet",
           headerShown: true,
-          headerTitle: 'Metamask Wallet',
+          headerTitle: "Metamask Wallet",
           headerTitleAlign: "center",
           headerTitleStyle: {
             color: "#000",
             fontSize: 20,
-            fontFamily: 'Poppins-Semibold',
+            fontFamily: "Poppins-Semibold",
             marginTop: 10,
           },
         }}

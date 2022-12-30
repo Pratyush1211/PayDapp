@@ -1,23 +1,21 @@
-// user flow 
+// user flow
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth, db } from "../../services/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const user = null;
 
-
 export const login = createAsyncThunk(
   "login",
   async ({ email, password }, thunkAPI) => {
     try {
-        const response = await auth.signInWithEmailAndPassword(email, password)
+      const response = await auth
+        .signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            return userCredential
+          return userCredential;
         })
-        .catch((error) =>
-          alert(error)
-        );
-        return {user: response.user}
+        .catch((error) => alert(error));
+      return { user: response.user };
     } catch (error) {
       return thunkAPI.rejectWithValue();
     }
@@ -25,32 +23,38 @@ export const login = createAsyncThunk(
 );
 
 export const signup = createAsyncThunk(
-    "signup",
-    async ({ email, password, firstname, lastname, username, phoneno }, thunkAPI) => {
-        try {
-            const response = await auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                db
-                .collection("users")
-                .doc(userCredential.user.uid)
-                .set({
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: username,
-                    phone_number: phoneno,
-                })
-                return userCredential
-            })
-            .catch((error) =>
-                alert(error.message)
-            );
-            return {user: response.user}
-        } catch (error) {
-            return thunkAPI.rejectWithValue();
-        }
+  "signup",
+  async (
+    { email, password, firstname, lastname, username, phoneno },
+    thunkAPI
+  ) => {
+    try {
+      const response = await auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          db.collection("users").doc(userCredential.user.uid).set({
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
+            phone_number: phoneno,
+          });
+          return userCredential;
+        })
+        .catch((error) => alert(error.message));
+      return { user: response.user };
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
     }
+  }
+);
 
-)
+export const logout = createAsyncThunk("signout", async (thunkAPI) => {
+  try {
+    await auth.signOut();
+  } catch (error) {
+    return thunkAPI.rejectWithValue();
+  }
+});
 
 const initialState = user
   ? { isLoggedIn: true, user }
@@ -63,21 +67,29 @@ export const authSlice = createSlice({
     [login.fulfilled]: (state, action) => {
       state.isLoggedIn = true;
       state.user = action.payload.user;
-      console.log(action.payload.user)
+      console.log(action.payload.user);
     },
     [login.rejected]: (state, action) => {
       state.isLoggedIn = false;
       state.user = null;
     },
     [signup.fulfilled]: (state, action) => {
-        state.isLoggedIn = true;
-        state.user = action.payload.user;
-        console.log(action.payload.user)
+      state.isLoggedIn = true;
+      state.user = action.payload.user;
+      console.log(action.payload.user);
     },
     [signup.rejected]: (state, action) => {
-        state.isLoggedIn = false;
-        state.user = null;
-    }
+      state.isLoggedIn = false;
+      state.user = null;
+    },
+    [logout.fulfilled]: (state, action) => {
+      state.isLoggedIn = false;
+      state.user = null;
+    },
+    [logout.rejected]: (state, action) => {
+      state.isLoggedIn = true;
+      state.user = null;
+    },
   },
 });
 

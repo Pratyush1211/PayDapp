@@ -10,19 +10,21 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { signup } from "../redux/slices/AuthenticationSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Screenwidth } from "../../constants/Layout";
 import PrimaryButton from "../../components/PrimaryButton";
 
 export default function CreateAccountScreen({ navigation }) {
+
+  const { isloggedIn } = useSelector(state => state.auth)
+
   const [firstname, setfirstname] = useState("");
   const [lastname, setlastname] = useState("");
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [phoneno, setphoneno] = useState("");
   const [password, setpassword] = useState("");
-  const [loading, setloading] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
@@ -30,7 +32,7 @@ export default function CreateAccountScreen({ navigation }) {
   const handleSignUp = () => {
     dispatch(
       signup({ firstname, lastname, username, email, phoneno, password })
-    );
+    )
   };
 
   return (

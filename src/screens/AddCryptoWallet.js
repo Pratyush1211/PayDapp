@@ -14,6 +14,7 @@ import PrimaryButton from "../../components/PrimaryButton";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { setWalletAddress } from "../redux/slices/walletSlice";
+import { logout } from "../redux/slices/AuthenticationSlice";
 
 export default function AddCryptoWallet({ navigation }) {
   const connector = useWalletConnect();
@@ -39,13 +40,9 @@ export default function AddCryptoWallet({ navigation }) {
     console.log(chainId);
   });
 
-  const logout = React.useCallback(() => {
-    ToastAndroid.show(
-      "User and Wallet disconnected sucessfully",
-      ToastAndroid.LONG
-    );
-    return connector.killSession();
-  }, [connector]);
+  const handleLogout = () => {
+    dispatch(logout())
+  }
 
   return (
     <View style={styles.container}>
@@ -70,6 +67,12 @@ export default function AddCryptoWallet({ navigation }) {
           </View>
         </>
       )}
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleLogout}>
+          <PrimaryButton title={"Logout"} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
