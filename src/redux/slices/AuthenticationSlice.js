@@ -1,8 +1,10 @@
+// user flow 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth, db } from "../../services/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const user = null;
+
 
 export const login = createAsyncThunk(
   "login",
@@ -13,7 +15,7 @@ export const login = createAsyncThunk(
             return userCredential
         })
         .catch((error) =>
-          alert("Register on App first or enter the credential carefully ")
+          alert(error)
         );
         return {user: response.user}
     } catch (error) {
@@ -21,6 +23,34 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+export const signup = createAsyncThunk(
+    "signup",
+    async ({ email, password, firstname, lastname, username, phoneno }, thunkAPI) => {
+        try {
+            const response = await auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                db
+                .collection("users")
+                .doc(userCredential.user.uid)
+                .set({
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    phone_number: phoneno,
+                })
+                return userCredential
+            })
+            .catch((error) =>
+                alert(error.message)
+            );
+            return {user: response.user}
+        } catch (error) {
+            return thunkAPI.rejectWithValue();
+        }
+    }
+
+)
 
 const initialState = user
   ? { isLoggedIn: true, user }
@@ -39,6 +69,15 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
     },
+    [signup.fulfilled]: (state, action) => {
+        state.isLoggedIn = true;
+        state.user = action.payload.user;
+        console.log(action.payload.user)
+    },
+    [signup.rejected]: (state, action) => {
+        state.isLoggedIn = false;
+        state.user = null;
+    }
   },
 });
 

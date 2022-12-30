@@ -1,11 +1,9 @@
 // navigation flow throughout the app
-
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { useFonts } from "expo-font";
 
 import LoginScreen from "../screens/LoginScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";

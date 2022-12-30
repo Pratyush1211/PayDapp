@@ -9,7 +9,8 @@ import {
   ToastAndroid,
 } from "react-native";
 import React, { useState } from "react";
-import { db, auth } from "../services/firebase";
+import { signup } from "../redux/slices/AuthenticationSlice";
+import { useDispatch } from "react-redux";
 
 import { Screenwidth } from "../../constants/Layout";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -25,57 +26,11 @@ export default function CreateAccountScreen({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
+  const dispatch = useDispatch();
   const handleSignUp = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed up
-        return db
-          .collection("users")
-          .doc(userCredential.user.uid)
-          .set({
-            firstname: firstname,
-            lastname: lastname,
-            username: username,
-            phone_number: phoneno,
-          })
-          .then(
-            auth
-              .signInWithEmailAndPassword(email, password)
-              .then((userCredential) => {
-                // Signed in
-                var user = userCredential;
-                console.log(user)
-                var uid = userCredential.user.uid;
-                var userDetails = db.collection("users").doc(uid);
-                userDetails
-                  .get()
-                  .then((doc) => {
-                    if (doc.exists) {
-                      console.log("Document data:", doc.data());
-                    } else {
-                      // doc.data() will be undefined in this case
-                      console.log("No such document!");
-                    }
-                  })
-                  .catch((error) => {
-                    console.log("Error getting document:", error);
-                  });
-              })
-          )
-          .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // ..
-            console.log(errorCode, errorMessage);
-          });
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ..
-        console.log(errorCode, errorMessage);
-      });
+    dispatch(
+      signup({ firstname, lastname, username, email, phoneno, password })
+    );
   };
 
   return (
