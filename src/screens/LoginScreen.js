@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Screenwidth } from "../../constants/Layout";
 import React, { useState, useEffect } from "react";
+import { auth, db } from "../services/firebase";
 import PrimaryButton from "../../components/PrimaryButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -19,13 +20,38 @@ export default function LoginScreen({ navigation }) {
   const [password, setpassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
 
+  
+  const SignIn = () => {
+    auth
+    .signInWithEmailAndPassword(username,password)
+    .then((userCredential) => {
+      // Signed in 
+      var user = userCredential;
+      var uid = userCredential.user.uid
+      var userDetails = db.collection('users').doc(uid)
+      userDetails.get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      })
+    })
+    .catch(error=>alert("Register on App first or enter the credential carefully "));
+
+
+};
+
   return (
     <View style={styles.container}>
       <Image
         source={{
           uri: "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/krinnxb23kgp75s0jyhp",
         }}
-        style={{ width: 100, height: 100, borderRadius: 50 }}
+        style={{ width: 120, height: 120, borderRadius: 50 }}
       />
       <Text
         style={{
@@ -33,6 +59,7 @@ export default function LoginScreen({ navigation }) {
           fontWeight: "400",
           marginVertical: 5,
           color: "#00A0F3",
+          fontFamily: 'Poppins-Semibold'
         }}
       >
         payDapp
@@ -72,7 +99,7 @@ export default function LoginScreen({ navigation }) {
       <View style={{ marginTop: 30 }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Add Crypto Wallet");
+            SignIn();
           }}
         >
           <PrimaryButton title={"Login"} />
@@ -106,9 +133,10 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    color: "#808080",
+    color: "#000",
     marginBottom: 5,
     marginLeft: 5,
+    fontFamily: 'Poppins-Semibold'
   },
   inputContainer: {
     height: 60,
@@ -120,6 +148,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     padding: 10,
     color: "#000",
+    fontFamily: 'Poppins-Regular'
   },
   FingerPrintContainer: {
     margin: 40,

@@ -1,4 +1,5 @@
 import  firebase from "firebase";
+
 import "firebase/auth";
 //import "firebase/database";
 import "firebase/firestore";
@@ -6,15 +7,16 @@ import "firebase/firestore";
 //import "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDhKFY1MMDjmYCP_jN9GkGmeFq0Wd3rFM4",
-    authDomain: "paymentdapp.firebaseapp.com",
-    projectId: "paymentdapp",
-    storageBucket: "paymentdapp.appspot.com",
-    messagingSenderId: "646580648864",
-    appId: "1:646580648864:web:e2b37752f6c9eb243382c5"
+    apiKey: "AIzaSyDPnt29v8uMZsLk9fDNMX3ZyWwLHabnk4k",
+    authDomain: "paydapp-69267.firebaseapp.com",
+    projectId: "paydapp-69267",
+    storageBucket: "paydapp-69267.appspot.com",
+    messagingSenderId: "583230866768",
+    appId: "1:583230866768:web:2eb2c263a837da375b5855",
+    measurementId: "G-LLF4FD73K6"
   };
 
-
+  
   let app;
   if(firebase.apps.length === 0) {
     app = firebase.initializeApp(firebaseConfig);
@@ -23,6 +25,6 @@ const firebaseConfig = {
   }
 
   const db =app.firestore();
-  const auth=firebase.auth();
+  const auth= firebase.auth();
 
   export{db,auth};

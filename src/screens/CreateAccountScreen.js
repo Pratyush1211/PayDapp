@@ -4,28 +4,78 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions,
   ScrollView,
   Switch,
+  ToastAndroid,
 } from "react-native";
 import React, { useState } from "react";
+import { db, auth } from "../services/firebase";
 
 import { Screenwidth } from "../../constants/Layout";
 import PrimaryButton from "../../components/PrimaryButton";
 
 export default function CreateAccountScreen({ navigation }) {
-  const screen = Dimensions.get("screen").width;
-  const inputboxWidth = 0.88 * screen;
-
   const [firstname, setfirstname] = useState("");
   const [lastname, setlastname] = useState("");
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [phoneno, setphoneno] = useState("");
   const [password, setpassword] = useState("");
+  const [loading, setloading] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
-
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const handleSignUp = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed up
+        return db
+          .collection("users")
+          .doc(userCredential.user.uid)
+          .set({
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
+            phone_number: phoneno,
+          })
+          .then(
+            auth
+              .signInWithEmailAndPassword(email, password)
+              .then((userCredential) => {
+                // Signed in
+                var user = userCredential;
+                var uid = userCredential.user.uid;
+                var userDetails = db.collection("users").doc(uid);
+                userDetails
+                  .get()
+                  .then((doc) => {
+                    if (doc.exists) {
+                      console.log("Document data:", doc.data());
+                    } else {
+                      // doc.data() will be undefined in this case
+                      console.log("No such document!");
+                    }
+                  })
+                  .catch((error) => {
+                    console.log("Error getting document:", error);
+                  });
+              })
+          )
+          .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // ..
+            console.log(errorCode, errorMessage);
+          });
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+        console.log(errorCode, errorMessage);
+      });
+  };
 
   return (
     <ScrollView
@@ -42,7 +92,7 @@ export default function CreateAccountScreen({ navigation }) {
         ]}
       >
         <View style={[styles.TextContainer, {}]}>
-          <Text>First name</Text>
+          <Text style={styles.label}>First name</Text>
           <TextInput
             style={[styles.inputContainer, { width: 165 }]}
             placeholder="example: John"
@@ -51,7 +101,7 @@ export default function CreateAccountScreen({ navigation }) {
           />
         </View>
         <View style={[styles.TextContainer]}>
-          <Text>Last name</Text>
+          <Text style={styles.label}>Last name</Text>
           <TextInput
             style={[styles.inputContainer, { width: 165 }]}
             placeholder={"example: Doe"}
@@ -62,7 +112,7 @@ export default function CreateAccountScreen({ navigation }) {
       </View>
 
       <View style={styles.TextContainer}>
-        <Text>Username</Text>
+        <Text style={styles.label}>Username</Text>
         <TextInput
           style={styles.inputContainer}
           placeholder={"Enter username "}
@@ -72,32 +122,32 @@ export default function CreateAccountScreen({ navigation }) {
       </View>
 
       <View style={styles.TextContainer}>
-        <Text>Email Address</Text>
+        <Text style={styles.label}>Email Address</Text>
         <TextInput
           style={styles.inputContainer}
           placeholder={"Enter username "}
-          onChangeText={setusername}
-          value={username}
+          onChangeText={setemail}
+          value={email}
         />
       </View>
 
       <View style={styles.TextContainer}>
-        <Text>Phone Number</Text>
+        <Text style={styles.label}>Passwordr</Text>
         <TextInput
           style={styles.inputContainer}
           placeholder={"Enter username "}
-          onChangeText={setusername}
-          value={username}
+          onChangeText={setpassword}
+          value={password}
         />
       </View>
 
       <View style={styles.TextContainer}>
-        <Text>Phone Number</Text>
+        <Text style={styles.label}>Phone Number</Text>
         <TextInput
           style={styles.inputContainer}
           placeholder={"example: 1234567890"}
-          onChangeText={setusername}
-          value={username}
+          onChangeText={setphoneno}
+          value={phoneno}
         />
       </View>
 
@@ -114,25 +164,21 @@ export default function CreateAccountScreen({ navigation }) {
             alignItems: "center",
             flexDirection: "row",
             justifyContent: "space-between",
-            borderWidth: 0
+            borderWidth: 0,
           },
         ]}
       >
-        <Text>Enable Biometric Login</Text>
+        <Text style={styles.label}>Enable Biometric Login</Text>
         <Switch onValueChange={toggleSwitch} value={isEnabled} />
       </View>
 
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate("Add Crypto Wallet")}
-        style={{marginTop: 5}}
-      >
-        <Text>
-          Creating an account{" "}
-          <Text style={{ fontWeight: "600", color: "#000" }}>
-            terms and conditions
-          </Text>
+      <Text style={styles.label}>
+        Creating an account{" "}
+        <Text style={{ fontWeight: "600", color: "#000" }}>
+          terms and conditions
         </Text>
+      </Text>
+      <TouchableOpacity activeOpacity={0.8} onPress={handleSignUp}>
         <PrimaryButton title={"Continue"} />
       </TouchableOpacity>
     </ScrollView>
@@ -143,7 +189,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     alignItems: "center",
-    paddingVertical: 25,
     padding: 12,
   },
   InfoText: {
@@ -152,18 +197,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "left",
   },
+
   TextContainer: {
     marginVertical: 15,
+  },
+  label: {
+    fontSize: 15,
+    color: "#000",
+    marginBottom: 5,
+    marginLeft: 5,
+    fontFamily: "Poppins-Semibold",
   },
   inputContainer: {
     height: 60,
     width: Screenwidth * 0.9,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderRadius: 12,
-    borderColor: "#808080",
+    borderColor: "#000",
     fontSize: 15,
-    fontWeight: "300",
     padding: 10,
     color: "#000",
+    fontFamily: "Poppins-Regular",
   },
 });

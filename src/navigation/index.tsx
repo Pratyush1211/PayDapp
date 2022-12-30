@@ -39,10 +39,7 @@ const MyTheme = {
 };
 
 export default function Navigation() {
-  const [loaded] = useFonts({
-    'Poppins-Regular' : require('../assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Semibold' : require('../assets/fonts/Poppins-SemiBold.ttf') 
-  })
+
   return (
     <NavigationContainer theme={MyTheme}>
       <RootNavigator />

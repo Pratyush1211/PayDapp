@@ -14,7 +14,8 @@ module.exports = {
       path: require.resolve('path-browserify'),
       stream: require.resolve('readable-stream'),
       vm: require.resolve('vm-browserify'),
-      sourceExts: ['jsx','js', 'json', 'ts', 'tsx', 'cjs']
     },
+    sourceExts: ['jsx','js', 'json', 'ts', 'tsx'],
+
   },
 };

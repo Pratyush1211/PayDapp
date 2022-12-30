@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { Avatar, Button } from "react-native-paper";
-import { auth } from "../firebase";
+
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import ProfileOptions from "../../components/ProfileOptions";
@@ -56,9 +56,7 @@ const ProfileScreen = ({ navigation }) => {
   const SignOutUser = () => {
     setTimeout(() => {
       logout();
-      auth.signOut().then(() => {
-        navigation.replace("Login");
-      });
+      navigation.replace("Login");
     }, 1000);
   };
 

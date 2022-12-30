@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   PrimaryText: {
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 18,
     color: '#FFFFFF',
+    fontFamily: 'Poppins-Semibold'
   },
 });
