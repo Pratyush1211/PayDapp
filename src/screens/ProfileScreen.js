@@ -5,18 +5,18 @@ import {
   View,
   TouchableOpacity,
   ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button } from "react-native-paper";
-
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/slices/AuthenticationSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import ProfileOptions from "../../components/ProfileOptions";
-
-const { name, role } = {
-  name: "Freddy Sanchez",
-  role: "freddy_sz12",
-};
+import { db } from "../services/firebase";
+import PrimaryButton from "../../components/PrimaryButton";
 
 const options = [
   {
@@ -46,62 +46,99 @@ const options = [
 ];
 
 const ProfileScreen = ({ navigation }) => {
+
+  const [useruid, setuseruid] = useState();
+  const [user, setuser] = useState({});
+  const [loading, setloading] = useState(false);
   const connector = useWalletConnect();
+  const dispatch = useDispatch();
 
-  const logout = React.useCallback(() => {
-    ToastAndroid.show("User and Wallet disconnected sucessfully", ToastAndroid.LONG);
-    return connector.killSession();
-  }, [connector]);
+  useEffect(() => {
+    const fetchuser = async () => {
+      setloading(true);
+      const user = await AsyncStorage.getItem("@userdetails");
+      const parsedUser = JSON.parse(user);
+      setuseruid(parsedUser.uid);
+      var userdetails = db.collection("users").doc(parsedUser.uid);
+      userdetails
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            // console.log("Document data:", doc.data());
+            setuser(doc.data());
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+          setloading(false);
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+          setloading(false);
+        });
+    };
+    fetchuser();
+  }, []);
 
-  const SignOutUser = () => {
-    setTimeout(() => {
-      logout();
-      navigation.replace("Login");
-    }, 1000);
+  const handleLogout = () => {
+    dispatch(logout()).then(() => {
+      ToastAndroid.show(
+        "User and Wallet disconnected sucessfully",
+        ToastAndroid.SHORT
+      );
+      connector.killSession();
+    });
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.AvatarContainer}>
-          <Avatar.Image
-            size={90}
-            source={{
-              uri: "https://picsum.photos/700",
-            }}
-          />
-          <View style={styles.InfoContainer}>
-            <Text style={styles.InfoText}>{name}</Text>
-            <Text style={[styles.InfoText, { fontSize: 15 }]}>{role}</Text>
-          </View>
-        </View>
-        <View style={{ marginTop: 20 }}>
-          {options.map((option) => (
-            <TouchableOpacity
-              key={option.id}
-              onPress={() => navigation.navigate(option.ScreenName)}
-            >
-              <ProfileOptions
-                key={option.id}
-                OptionName={option.OptionName}
-                OptionDescription={option.OptionDescription}
-                iconName={option.iconName}
-              />
-            </TouchableOpacity>
-          ))}
-        </View>
-        <Button
-          uppercase={false}
-          contentStyle={{ height: 50, width: 150 }}
-          style={styles.logoutButton}
-          labelStyle={{ fontSize: 16, color: "black" }}
-          mode="contained-tonal"
-          icon="logout"
-          onPress={SignOutUser}
+      {loading ? (
+        <View
+          style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
         >
-          Logout
-        </Button>
-      </ScrollView>
+          <ActivityIndicator size={'large'} color={'#000'}/>
+        </View>
+      ) : (
+        <ScrollView>
+          <View style={styles.AvatarContainer}>
+            <Avatar.Image
+              size={90}
+              source={{
+                uri: "https://picsum.photos/700",
+              }}
+            />
+            <View style={styles.InfoContainer}>
+              <Text style={styles.InfoText}>
+                {user.firstname} {user.lastname}
+              </Text>
+              <Text style={[styles.InfoText, { fontSize: 15 }]}>
+                {user.username}
+              </Text>
+            </View>
+          </View>
+          <View style={{ marginTop: 20 }}>
+            {options.map((option) => (
+              <TouchableOpacity
+                key={option.id}
+                onPress={() => navigation.navigate(option.ScreenName)}
+              >
+                <ProfileOptions
+                  key={option.id}
+                  OptionName={option.OptionName}
+                  OptionDescription={option.OptionDescription}
+                  iconName={option.iconName}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handleLogout}>
+            <PrimaryButton title={'Logout'}/>
+          </TouchableOpacity>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -112,27 +149,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    flexDirection: "column",
+    alignItems: 'center'
   },
   AvatarContainer: {
     borderTopColor: "black",
     marginTop: 15,
     flexDirection: "row",
-    paddingLeft: 25,
+    paddingHorizontal: 20,
   },
   InfoContainer: {
     marginTop: 18,
     marginLeft: 10,
-    alignContent: "center",
     flex: 1,
   },
   InfoText: {
     fontSize: 20,
     color: "black",
-    fontWeight: "500",
+    fontFamily: 'Poppins-Semibold'
   },
-  logoutButton: {
-    marginTop: 20,
-    marginBottom: 20,
+  buttonContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginBottom: 30,
   },
 });

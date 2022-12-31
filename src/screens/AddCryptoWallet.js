@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // components
 import WalletDetails from "../../components/WalletDetails";
@@ -19,7 +20,6 @@ import { logout } from "../redux/slices/AuthenticationSlice";
 export default function AddCryptoWallet({ navigation }) {
   const connector = useWalletConnect();
   const dispatch = useDispatch();
-
   const connectWallet = React.useCallback(
     async (data) => {
       const con = await connector.connect();
@@ -39,10 +39,6 @@ export default function AddCryptoWallet({ navigation }) {
     console.log(accounts);
     console.log(chainId);
   });
-
-  const handleLogout = () => {
-    dispatch(logout())
-  }
 
   return (
     <View style={styles.container}>
@@ -67,12 +63,6 @@ export default function AddCryptoWallet({ navigation }) {
           </View>
         </>
       )}
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogout}>
-          <PrimaryButton title={"Logout"} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }

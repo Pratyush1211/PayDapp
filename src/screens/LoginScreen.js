@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { Screenwidth } from "../../constants/Layout";
 import React, { useState } from "react";
@@ -25,11 +26,16 @@ export default function LoginScreen({ navigation }) {
   const [email, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleLogin = () => {
+    setloading(true)
     dispatch(login({ email, password })
+    ).then((res) => {
+      setloading(false)
+    }
     );
   }
 
@@ -85,6 +91,7 @@ export default function LoginScreen({ navigation }) {
       </View>
 
       <View style={{ marginTop: 30 }}>
+        { loading ? <ActivityIndicator size="large" color="#00A0F3" /> : null}
         <TouchableOpacity
           onPress={() => {
             handleLogin();

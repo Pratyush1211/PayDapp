@@ -48,7 +48,6 @@ export default function Navigation() {
 
 function RootNavigator() {
   const { isLoggedIn } = useSelector((state) => state.auth);
-
   return (
     <Stack.Navigator
       screenOptions={{
@@ -186,13 +185,17 @@ function BottomTabNavigator() {
 
 const ProfileNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="Profile">
+    <Stack.Navigator initialRouteName="Profile"
+      screenOptions={{
+        headerShown: true,
+        headerTitleAlign: "center",
+        headerTitleStyle: { color: "#000", fontSize: 20, fontFamily: 'Poppins-Semibold' },
+        
+      }}
+    >
       <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: "white" },
-          headerTitleStyle: { color: "black", fontWeight: "400", fontSize: 20 },
-          headerTintColor: "white",
-          title: "Profile Information",
+          title: "Profile Details",
           headerTitleAlign: "center",
         }}
         name="Profile"

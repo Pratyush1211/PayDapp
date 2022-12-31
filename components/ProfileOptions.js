@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { Screenwidth } from '../constants/Layout';
 
 const ProfileOptions = ({
   OptionName,
@@ -42,10 +43,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     height: 70,
+    width: Screenwidth,
     justifyContent: 'center',
     alignItems: 'center',
     borderTopWidth: 0.5,
     borderTopColor: '#E5E5E5',
+    
   },
   IconOption: {
     marginLeft: 25,
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
   },
   ProfileOptionText: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Semibold',
     color: 'black',
     marginTop: 5,
   },

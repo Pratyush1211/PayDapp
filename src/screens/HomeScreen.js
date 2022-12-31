@@ -21,7 +21,8 @@ import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = ({ navigation }) => {
   const connector = useWalletConnect();
-  const [ loading, setloading ] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [transactionloading, settransactionloading] = useState(false);
   const [balance, setBalance] = useState(0);
   const [transaction, settransaction] = useState([]);
   const [expanded, setExpanded] = useState(false);
@@ -36,8 +37,8 @@ const HomeScreen = ({ navigation }) => {
 
   // for fetching data and handling touch on Activity Button
   const ActivityhandlePress = () => {
-    if ( transaction.length == 0){
-    getTransaction();
+    if (transaction.length == 0) {
+      getTransaction();
     }
     settransactionActivity(!transactionActivity);
   };
@@ -48,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
       const apikey = "ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8";
       const endpoint = "https://api-testnet.polygonscan.com/api";
       try {
-        setloading(true)
+        setloading(true);
         const etherscan = await axios.get(
           endpoint +
             `?module=account&action=balance&address=${ADDRESS}&apikey=${apikey}`
@@ -66,24 +67,24 @@ const HomeScreen = ({ navigation }) => {
         tempBalance = USDbalance.toString();
         tempBalance = tempBalance.slice(0, 6);
         setBalance(tempBalance);
-        setloading(false)
+        setloading(false);
       } catch (error) {
         Alert.alert(error);
-        setloading(false)
+        setloading(false);
       }
     };
     getwalletDetails();
   }, []);
 
-  const getTransaction = async() => {
+  const getTransaction = async () => {
     const ADDRESS = connector.accounts[0];
     const apikey = "ZYDTV4HXTU8KRZ9EIQA263HK287Y514ZN8";
     const endpoint = "https://api-testnet.polygonscan.com/api";
     try {
-      setloading(true);
+      settransactionloading(true);
       const etherscan = await axios.get(
         endpoint +
-        `?module=account&action=txlist&address=${ADDRESS}&startblock=0
+          `?module=account&action=txlist&address=${ADDRESS}&startblock=0
         &endblock=999999
         &page=1
         &offset=150
@@ -92,12 +93,12 @@ const HomeScreen = ({ navigation }) => {
       );
       const data = etherscan.data.result;
       settransaction(data);
-      setloading(false);
+      settransactionloading(false);
     } catch (error) {
       Alert.alert("Problem in fetching Transaction Details");
-      setloading(false);
+      settransactionloading(false);
     }
-  }
+  };
 
   const options = [
     {
@@ -124,11 +125,13 @@ const HomeScreen = ({ navigation }) => {
     <>
       <View style={styles.WalletContainer}>
         <View style={styles.ImageContainer}>
-          <Image source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGbGAcGsdDSchgCNRj4UuCu-Rg-r2QVyxfkA&usqp=CAU"
-          }} 
-          style={{height: 50, width: 50}}
-          resizeMode={"cover"} />
+          <Image
+            source={{
+              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGbGAcGsdDSchgCNRj4UuCu-Rg-r2QVyxfkA&usqp=CAU",
+            }}
+            style={{ height: 50, width: 50 }}
+            resizeMode={"cover"}
+          />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.heading}>{title}</Text>
@@ -154,7 +157,14 @@ const HomeScreen = ({ navigation }) => {
               style={styles.tradingoptions}
             >
               <FontAwesome5 name={option.iconName} color={"#FFF"} size={10} />
-              <Text style={{ color: "#FFF", fontSize: 10, marginTop: 3, fontFamily: 'Poppins-Regular' }}>
+              <Text
+                style={{
+                  color: "#FFF",
+                  fontSize: 10,
+                  marginTop: 3,
+                  fontFamily: "Poppins-Regular",
+                }}
+              >
                 {option.OptionName}
               </Text>
             </TouchableOpacity>
@@ -195,43 +205,46 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {
-        loading ? (
-          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator color="#000"/>
-          </View>
-        ) : (
-      <View>
-      <TouchableOpacity activeOpacity={1} onPress={handlePress}>
-        <Card expanded={expanded} amount={0} />
-      </TouchableOpacity>
-      {transactionActivity ? (
-        <Text style={[styles.label, { color: "#000" }]}>
-          Transaction Activity
-        </Text>
-      ) : null}
-      {loading ? (<ActivityIndicator color="#000"/>) : null}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexDirection: "column-reverse" }}
-      >
-        {transactionActivity ? (
-          <>
-            {transaction &&
-              transaction.map((transactions) => (
-                <TransactionActivityDetails
-                  key={transactions.blockNumber}
-                  receiver={transactions.to}
-                  gasPrice={ethers.utils
-                    .formatUnits(transactions.value, 18)
-                    .toString()}
-                  timeStamp={transactions.timeStamp}
-                />
-              ))}
-          </>
-        ) : null}
-      </ScrollView>
-      </View>)}
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator color="#000" />
+        </View>
+      ) : (
+        <View>
+          <TouchableOpacity activeOpacity={1} onPress={handlePress}>
+            <Card expanded={expanded} amount={0} />
+          </TouchableOpacity>
+          {transactionActivity ? (
+            <Text style={[styles.label, { color: "#000" }]}>
+              Transaction Activity
+            </Text>
+          ) : null}
+          {transactionloading ? (
+            <ActivityIndicator color="#000" style={{ marginTop: 10 }} />
+          ) : null}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexDirection: "column-reverse" }}
+          >
+            {transactionActivity ? (
+              <>
+                {transaction.map((transactions) => (
+                  <TransactionActivityDetails
+                    key={transactions.blockNumber}
+                    receiver={transactions.to}
+                    gasPrice={ethers.utils
+                      .formatUnits(transactions.value, 18)
+                      .toString()}
+                    timeStamp={transactions.timeStamp}
+                  />
+                ))}
+              </>
+            ) : null}
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };
@@ -252,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
-    elevation: 2, 
+    elevation: 2,
   },
   ImageContainer: {
     backgroundColor: "#FFF",
@@ -262,7 +275,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     margin: 10,
-    marginRight: 20
+    marginRight: 20,
   },
   tradingoptions: {
     height: 60,
