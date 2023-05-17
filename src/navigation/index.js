@@ -60,7 +60,7 @@ function RootNavigator() {
         },
       }}
     >
-      {!isLoggedIn ? (
+      {/* {!isLoggedIn ? (
         <>
           <Stack.Screen
             name="Login"
@@ -69,7 +69,7 @@ function RootNavigator() {
           />
           <Stack.Screen name="Create Account" component={CreateAccountScreen} />
         </>
-      ) : (
+      ) : ( */}
         <>
           <Stack.Screen name="Add Crypto Wallet" component={AddCryptoWallet} />
           <Stack.Screen
@@ -112,7 +112,7 @@ function RootNavigator() {
           <Stack.Screen name="Enter Amount" component={EnterAmountScreen} />
           <Stack.Screen name="Review & Send" component={ReviewandSendScreen} />
         </>
-      )}
+      {/* )} */}
     </Stack.Navigator>
   );
 }
