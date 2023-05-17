@@ -26,20 +26,20 @@ This will allow us to use `WalletConnect` directly from the `expo` client withou
 
 ## Return object on successful wallet connection
 {
-  "accounts": Array [
-    "0xc8ee416ca70ba4b500dcc3fdf351b65a924eaded",
+  "accounts": [
+    "0xc8ee416ca70ba4b500dcc3fdf351b65a924eaded"
   ],
   "chainId": 1,
   "peerId": "cee46d16-9e4e-4177-9ffc-dfd11ee19ba4",
-  "peerMeta": Object {
+  "peerMeta": {
     "description": "MetaMask Mobile app",
-    "icons": Array [
-      "https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg",
+    "icons": [
+      "![MetaMask Logo](https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg)"
     ],
     "name": "MetaMask",
     "ssl": true,
-    "url": "https://metamask.io",
-  },
+    "url": "https://metamask.io"
+  }
 }
 
 ## Firebase is used for Authentication.
