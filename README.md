@@ -13,4 +13,3 @@ This will allow us to use `WalletConnect` directly from the `expo` client withou
 ## Firebase is used for Authentication.
 A user can register or sign in with Firebase functions using email and password the whole authentication states are managed by redux-toolit 
 
-## Getting Started
