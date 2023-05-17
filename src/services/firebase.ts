@@ -7,13 +7,13 @@ import "firebase/firestore";
 //import "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDPnt29v8uMZsLk9fDNMX3ZyWwLHabnk4k",
-    authDomain: "paydapp-69267.firebaseapp.com",
-    projectId: "paydapp-69267",
-    storageBucket: "paydapp-69267.appspot.com",
-    messagingSenderId: "583230866768",
-    appId: "1:583230866768:web:2eb2c263a837da375b5855",
-    measurementId: "G-LLF4FD73K6"
+    apiKey: "",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
   };
 
   
