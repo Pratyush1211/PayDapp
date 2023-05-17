@@ -25,6 +25,7 @@ In order to work around this we can use `metro.config.js` to create aliases for 
 This will allow us to use `WalletConnect` directly from the `expo` client without having to eject the application.
 
 ## Return object on successful wallet connection
+```json
 {
   "accounts": [
     "0xc8ee416ca70ba4b500dcc3fdf351b65a924eaded"
@@ -34,13 +35,14 @@ This will allow us to use `WalletConnect` directly from the `expo` client withou
   "peerMeta": {
     "description": "MetaMask Mobile app",
     "icons": [
-      "![MetaMask Logo](https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg)"
+      "https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg"
     ],
     "name": "MetaMask",
     "ssl": true,
     "url": "https://metamask.io"
   }
 }
+```
 
 ## Firebase is used for Authentication.
 A user can register or sign in with Firebase functions using email and password the whole authentication states are managed by redux-toolit 
