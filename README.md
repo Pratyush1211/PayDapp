@@ -25,7 +25,7 @@ In order to work around this we can use `metro.config.js` to create aliases for 
 This will allow us to use `WalletConnect` directly from the `expo` client without having to eject the application.
 
 ## Return object on successful wallet connection
-Object {
+{
   "accounts": Array [
     "0xc8ee416ca70ba4b500dcc3fdf351b65a924eaded",
   ],
